@@ -142,15 +142,16 @@ def main():
     print()
 
     # 2. 核心依赖
-    print(f"{YELLOW}[2/8] 核心 Python 依赖{NC}")
+    print(f"{YELLOW}[2/9] 核心 Python 依赖{NC}")
     results.append(check_module("fastmcp"))
     results.append(check_module("playwright"))
     results.append(check_module("beautifulsoup4", "bs4"))
     results.append(check_module("lxml"))
+    results.append(check_module("markitdown"))
     print()
 
     # 3. Playwright 浏览器
-    print(f"{YELLOW}[3/8] Playwright 可导入性{NC}")
+    print(f"{YELLOW}[3/9] Playwright 可导入性{NC}")
     try:
         from playwright.sync_api import sync_playwright
         print_status("ok", "Playwright 可以正常导入")
@@ -161,27 +162,32 @@ def main():
     print()
 
     # 4. NotebookLM CLI
-    print(f"{YELLOW}[4/8] NotebookLM CLI{NC}")
+    print(f"{YELLOW}[4/9] NotebookLM CLI{NC}")
     results.append(check_command("notebooklm"))
     print()
 
-    # 5. Git 命令
-    print(f"{YELLOW}[5/8] Git 命令{NC}")
+    # 5. markitdown CLI
+    print(f"{YELLOW}[5/9] markitdown CLI{NC}")
+    results.append(check_command("markitdown"))
+    print()
+
+    # 6. Git 命令
+    print(f"{YELLOW}[6/9] Git 命令{NC}")
     results.append(check_command("git"))
     print()
 
-    # 6. MCP 服务器文件
-    print(f"{YELLOW}[6/8] MCP 服务器文件{NC}")
+    # 7. MCP 服务器文件
+    print(f"{YELLOW}[7/9] MCP 服务器文件{NC}")
     results.append(check_mcp_server())
     print()
 
-    # 7. MCP 配置
-    print(f"{YELLOW}[7/8] MCP 配置{NC}")
+    # 8. MCP 配置
+    print(f"{YELLOW}[8/9] MCP 配置{NC}")
     results.append(check_mcp_config())
     print()
 
-    # 8. NotebookLM 认证
-    print(f"{YELLOW}[8/8] NotebookLM 认证{NC}")
+    # 9. NotebookLM 认证
+    print(f"{YELLOW}[9/9] NotebookLM 认证{NC}")
     results.append(check_notebooklm_auth())
     print()
 

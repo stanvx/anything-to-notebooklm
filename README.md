@@ -9,9 +9,24 @@
 | 微信公众号 | `https://mp.weixin.qq.com/s/xxx` | ✅ |
 | 任意网页 | `https://example.com/article` | ✅ |
 | YouTube | `https://youtube.com/watch?v=xxx` | ✅ |
-| PDF | `/path/to/file.pdf` | ✅ |
-| Markdown | `/path/to/file.md` | ✅ |
+| **Office 文档** | | |
+| - Word | `/path/to/doc.docx` | ✅ |
+| - PowerPoint | `/path/to/slides.pptx` | ✅ |
+| - Excel | `/path/to/data.xlsx` | ✅ |
+| **电子书与文档** | | |
+| - PDF | `/path/to/file.pdf` | ✅ |
+| - EPUB | `/path/to/book.epub` | ✅ |
+| - Markdown | `/path/to/notes.md` | ✅ |
+| **图片（OCR）** | `/path/to/scan.jpg` | ✅ |
+| **音频（转录）** | `/path/to/recording.mp3` | ✅ |
+| **结构化数据** | | |
+| - CSV | `/path/to/data.csv` | ✅ |
+| - JSON | `/path/to/config.json` | ✅ |
+| - XML | `/path/to/data.xml` | ✅ |
+| ZIP 压缩包 | `/path/to/archive.zip` | ✅ |
 | 搜索关键词 | "搜索 'AI趋势'" | ✅ |
+
+**支持 15+ 种文件格式**，通过 [markitdown](https://github.com/microsoft/markitdown) 自动转换。
 
 ## 快速开始
 
@@ -89,6 +104,10 @@ notebooklm list  # 验证认证成功
 ```
 把这个PDF上传生成报告 /path/to/file.pdf
 这个Markdown生成Quiz /path/to/notes.md
+把这本EPUB电子书做成播客 /path/to/book.epub
+这个Word文档做成思维导图 /path/to/doc.docx
+把这个扫描图片做成文档 /path/to/scan.jpg（自动OCR）
+这个录音转成文字并生成报告 /path/to/meeting.mp3
 ```
 
 ### 搜索关键词
@@ -142,10 +161,12 @@ weixin-to-notebooklm/
 - playwright >= 1.40.0
 - beautifulsoup4 >= 4.12.0
 - lxml >= 4.9.0
+- **markitdown[all] >= 0.0.1** - 文件格式转换（支持 15+ 格式）
 
 ### 外部工具
 - [notebooklm-py](https://github.com/teng-lin/notebooklm-py) - NotebookLM CLI 工具
 - [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) - 微信公众号文章读取 MCP 服务器（可选，仅微信公众号需要）
+- [markitdown](https://github.com/microsoft/markitdown) - 微软出品的文件转 Markdown 工具
 
 ## 故障排查
 

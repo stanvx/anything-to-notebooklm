@@ -20,16 +20,35 @@ homepage: https://github.com/joeseesun/weixin-to-notebooklm
 ### 3. YouTube 视频
 自动提取 YouTube 视频的字幕和元数据
 
-### 4. PDF 文档
-本地或在线的 PDF 文件
+### 4. Office 文档
+- **Word (DOCX)** - 保留表格和格式
+- **PowerPoint (PPTX)** - 提取幻灯片和备注
+- **Excel (XLSX)** - 表格数据
 
-### 5. Markdown 文件
-本地 Markdown 文档
+### 5. 电子书与文档
+- **PDF** - 全文提取
+- **EPUB** - 电子书全文提取
+- **Markdown (.md)** - 原生支持
 
-### 6. 纯文本
+### 6. 图片与扫描件
+- **Images** (JPEG, PNG, GIF, WebP) - OCR 识别文字
+- 扫描的 PDF 文档 - OCR 提取文字
+
+### 7. 音频文件
+- **Audio** (WAV, MP3) - 语音转文字
+
+### 8. 结构化数据
+- **CSV** - 逗号分隔数据
+- **JSON** - JSON 数据
+- **XML** - XML 文档
+
+### 9. 压缩包
+- **ZIP** - 自动解压并处理所有支持的文件
+
+### 10. 纯文本
 直接输入或粘贴的文本内容
 
-### 7. 搜索关键词
+### 11. 搜索关键词
 通过 Web Search 搜索关键词，汇总多个来源的信息
 
 ## 前置条件
@@ -86,6 +105,10 @@ notebooklm list  # 验证认证成功
 ### 本地文件
 - "把这个PDF上传到NotebookLM /path/to/file.pdf"
 - "这个Markdown文件生成PPT /path/to/file.md"
+- "这个EPUB电子书生成播客 /path/to/book.epub"
+- "把这个Word文档做成思维导图 /path/to/doc.docx"
+- "这个PowerPoint生成Quiz /path/to/slides.pptx"
+- "把这个扫描PDF做成报告 /path/to/scan.pdf"（自动OCR）
 
 ### 搜索关键词
 - "搜索 'AI发展趋势' 并生成报告"
@@ -121,8 +144,15 @@ Claude 自动识别输入类型：
 | `https://mp.weixin.qq.com/s/` | 微信公众号 | MCP 工具抓取 |
 | `https://youtube.com/...` 或 `https://youtu.be/...` | YouTube | 直接传递给 NotebookLM |
 | `https://` 或 `http://` | 网页 | 直接传递给 NotebookLM |
-| `/path/to/file.pdf` | PDF 文件 | 直接上传 |
+| `/path/to/file.pdf` | PDF 文件 | markitdown 转 Markdown → TXT |
+| `/path/to/file.epub` | EPUB 电子书 | markitdown 转 Markdown → TXT |
+| `/path/to/file.docx` | Word 文档 | markitdown 转 Markdown → TXT |
+| `/path/to/file.pptx` | PowerPoint | markitdown 转 Markdown → TXT |
+| `/path/to/file.xlsx` | Excel | markitdown 转 Markdown → TXT |
 | `/path/to/file.md` | Markdown | 直接上传 |
+| `/path/to/image.jpg` | 图片（OCR） | markitdown OCR → TXT |
+| `/path/to/audio.mp3` | 音频 | markitdown 转录 → TXT |
+| `/path/to/file.zip` | ZIP 压缩包 | 解压 → markitdown 批量转换 |
 | 关键词（无URL，无路径） | 搜索查询 | WebSearch → 汇总 → TXT |
 
 ### Step 2: 获取内容
@@ -136,8 +166,29 @@ Claude 自动识别输入类型：
 - 直接使用 URL 调用 `notebooklm source add [URL]`
 - NotebookLM 自动提取内容
 
-**本地文件**：
-- 直接上传：`notebooklm source add /path/to/file`
+**Office 文档/电子书/PDF**：
+- 使用 markitdown 转换为 Markdown
+- 命令：`markitdown /path/to/file.docx -o /tmp/converted.md`
+- 保存为 TXT：`/tmp/{filename}_converted_{timestamp}.txt`
+
+**本地 Markdown**：
+- 直接上传：`notebooklm source add /path/to/file.md`
+
+**图片（OCR）**：
+- markitdown 自动 OCR 识别文字
+- 提取 EXIF 元数据
+- 保存为 TXT
+
+**音频文件**：
+- markitdown 自动转录语音为文字
+- 提取音频元数据
+- 保存为 TXT
+
+**ZIP 压缩包**：
+- 自动解压到临时目录
+- 遍历所有支持的文件
+- 批量使用 markitdown 转换
+- 合并为单个 TXT 或多个 Source
 
 **搜索关键词**：
 - 使用 WebSearch 工具搜索关键词
@@ -290,7 +341,35 @@ notebooklm source add /tmp/weixin_xxx.txt --wait  # 上传文件并等待处理�
 📦 大小：3.8 MB
 ```
 
-### 示例 5：本地 Markdown → Quiz
+### 示例 5: EPUB 电子书 → 播客
+
+**用户输入**：
+```
+把这本电子书做成播客 /Users/joe/Books/sapiens.epub
+```
+
+**执行流程**：
+1. 识别为 EPUB 文件
+2. markitdown 转换为 Markdown
+3. 保存为 TXT
+4. 上传到 NotebookLM
+5. 生成播客
+
+**输出**：
+```
+✅ EPUB 电子书已转换为播客！
+
+📚 电子书：Sapiens: A Brief History of Humankind
+📄 页数：约 450 页
+📊 字数：约 15 万字
+
+🎙️ 播客已生成：
+📁 文件：/tmp/sapiens_podcast.mp3
+⏱️ 时长：约 45 分钟（精华版）
+📊 大小：48.2 MB
+```
+
+### 示例 6：Word 文档 → Quiz
 
 **用户输入**：
 ```

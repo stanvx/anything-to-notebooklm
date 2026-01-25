@@ -61,11 +61,12 @@ if [ -f "$MCP_DIR/requirements.txt" ]; then
     echo -e "${GREEN}✅ MCP 依赖安装完成${NC}"
 fi
 
-# 安装 Skill 依赖
+# 安装 Skill 依赖（包括 markitdown）
 if [ -f "$SKILL_DIR/requirements.txt" ]; then
-    echo "安装 Skill 依赖..."
+    echo "安装 Skill 依赖（包括 markitdown 文件转换工具）..."
     pip3 install -r "$SKILL_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ Skill 依赖安装完成${NC}"
+    echo -e "${GREEN}✅ markitdown 已安装（支持 15+ 文件格式转换）${NC}"
 fi
 
 # 4. 安装 Playwright 浏览器
