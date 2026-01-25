@@ -7,6 +7,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![GitHub stars](https://img.shields.io/github/stars/joeseesun/weixin-to-notebooklm?style=social)](https://github.com/joeseesun/weixin-to-notebooklm/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/joeseesun/weixin-to-notebooklm?style=social)](https://github.com/joeseesun/weixin-to-notebooklm/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/joeseesun/weixin-to-notebooklm)](https://github.com/joeseesun/weixin-to-notebooklm/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/joeseesun/weixin-to-notebooklm)](https://github.com/joeseesun/weixin-to-notebooklm/commits/main)
 
 [快速开始](#-快速开始) • [支持格式](#-支持的内容源) • [使用示例](#-使用示例) • [常见问题](#-常见问题)
 
