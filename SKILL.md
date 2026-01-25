@@ -1,8 +1,8 @@
 ---
-name: weixin-to-notebooklm
+name: anything-to-notebooklm
 description: 多源内容智能处理器：支持微信公众号、网页、YouTube、PDF、Markdown等，自动上传到NotebookLM并生成播客/PPT/思维导图等多种格式
 user-invocable: true
-homepage: https://github.com/joeseesun/weixin-to-notebooklm
+homepage: https://github.com/joeseesun/anything-to-notebooklm
 ---
 
 # 多源内容 → NotebookLM 智能处理器
@@ -55,7 +55,7 @@ homepage: https://github.com/joeseesun/weixin-to-notebooklm
 
 ### 1. 安装 wexin-read-mcp
 
-MCP 服务器已安装在：`~/.claude/skills/weixin-to-notebooklm/wexin-read-mcp/`
+MCP 服务器已安装在：`~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/`
 
 **配置 MCP**（需要手动添加到 Claude 配置文件）：
 
@@ -68,7 +68,7 @@ MCP 服务器已安装在：`~/.claude/skills/weixin-to-notebooklm/wexin-read-mc
     "weixin-reader": {
       "command": "python",
       "args": [
-        "/Users/joe/.claude/skills/weixin-to-notebooklm/wexin-read-mcp/src/server.py"
+        "/Users/joe/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py"
       ]
     }
   }
@@ -89,7 +89,7 @@ notebooklm list  # 验证认证成功
 ## 触发方式
 
 ### 微信公众号文章
-- `/weixin-to-notebooklm [微信文章链接]`
+- `/anything-to-notebooklm [微信文章链接]`
 - "把这篇微信文章传到NotebookLM"
 - "把这篇微信文章生成播客"
 
@@ -531,7 +531,7 @@ Skill 会将要求作为 instructions 传给 NotebookLM。
     "weixin-reader": {
       "command": "python",
       "args": [
-        "/Users/joe/.claude/skills/weixin-to-notebooklm/wexin-read-mcp/src/server.py"
+        "/Users/joe/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py"
       ]
     }
   }
@@ -546,10 +546,10 @@ Skill 会将要求作为 instructions 传给 NotebookLM。
 
 ```bash
 # 测试 MCP 服务器
-python ~/.claude/skills/weixin-to-notebooklm/wexin-read-mcp/src/server.py
+python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
 
 # 如果报错，检查依赖
-cd ~/.claude/skills/weixin-to-notebooklm/wexin-read-mcp
+cd ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp
 pip install -r requirements.txt
 playwright install chromium
 ```

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-环境检查脚本 - 验证 weixin-to-notebooklm skill 所有依赖
+环境检查脚本 - 验证 anything-to-notebooklm skill 所有依赖
 """
 
 import sys
@@ -131,7 +131,7 @@ def check_notebooklm_auth():
 
 def main():
     print(f"\n{BLUE}========================================{NC}")
-    print(f"{BLUE}  环境检查 - weixin-to-notebooklm{NC}")
+    print(f"{BLUE}  环境检查 - anything-to-notebooklm{NC}")
     print(f"{BLUE}========================================{NC}\n")
 
     results = []

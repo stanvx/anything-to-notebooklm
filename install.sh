@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# weixin-to-notebooklm Skill Installer
+# anything-to-notebooklm Skill Installer
 # 自动安装所有依赖并配置环境
 
 set -e  # 遇到错误立即退出
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_NAME="weixin-to-notebooklm"
+SKILL_NAME="anything-to-notebooklm"
 
 # 颜色输出
 RED='\033[0;31m'

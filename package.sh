@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 打包 weixin-to-notebooklm skill 用于分享
+# 打包 anything-to-notebooklm skill 用于分享
 # 生成一个不包含大文件的精简版 tar.gz
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_NAME="weixin-to-notebooklm"
+SKILL_NAME="anything-to-notebooklm"
 OUTPUT_DIR="${1:-$HOME/Desktop}"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 OUTPUT_FILE="$OUTPUT_DIR/${SKILL_NAME}_${TIMESTAMP}.tar.gz"
