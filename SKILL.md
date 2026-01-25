@@ -1,13 +1,36 @@
 ---
 name: weixin-to-notebooklm
-description: 从微信读书获取内容并上传到NotebookLM，支持自然语言生成各类内容（播客/PPT/思维导图/Quiz等）
+description: 多源内容智能处理器：支持微信公众号、网页、YouTube、PDF、Markdown等，自动上传到NotebookLM并生成播客/PPT/思维导图等多种格式
 user-invocable: true
-homepage: https://github.com/Bwkyd/wexin-read-mcp
+homepage: https://github.com/joeseesun/weixin-to-notebooklm
 ---
 
-# 微信读书 → NotebookLM 智能处理器
+# 多源内容 → NotebookLM 智能处理器
 
-自动从微信公众号获取文章内容，上传到 NotebookLM，并根据自然语言指令生成各类内容。
+自动从多种来源获取内容，上传到 NotebookLM，并根据自然语言指令生成播客、PPT、思维导图等多种格式。
+
+## 支持的内容源
+
+### 1. 微信公众号文章
+通过 MCP 服务器自动抓取微信公众号文章内容（绕过反爬虫）
+
+### 2. 任意网页链接
+支持任何公开可访问的网页（新闻、博客、文档等）
+
+### 3. YouTube 视频
+自动提取 YouTube 视频的字幕和元数据
+
+### 4. PDF 文档
+本地或在线的 PDF 文件
+
+### 5. Markdown 文件
+本地 Markdown 文档
+
+### 6. 纯文本
+直接输入或粘贴的文本内容
+
+### 7. 搜索关键词
+通过 Web Search 搜索关键词，汇总多个来源的信息
 
 ## 前置条件
 
@@ -46,19 +69,30 @@ notebooklm list  # 验证认证成功
 
 ## 触发方式
 
-### 基础触发
-
-- `/weixin-to-notebooklm [链接]`
+### 微信公众号文章
+- `/weixin-to-notebooklm [微信文章链接]`
 - "把这篇微信文章传到NotebookLM"
-- "上传这篇文章到NotebookLM"
+- "把这篇微信文章生成播客"
 
-### 带处理意图的触发
+### 网页链接
+- "把这个网页做成播客 [URL]"
+- "这篇文章帮我做成PPT [URL]"
+- "帮我分析这个网页 [URL]"
 
-- "把这篇微信文章**生成播客**"
-- "这篇文章帮我**做成PPT**"
-- "帮我**画个思维导图**，链接：xxx"
-- "这篇文章**生成一个Quiz**"
-- "用这篇文章**做个视频**"
+### YouTube 视频
+- "把这个YouTube视频做成播客 [YouTube URL]"
+- "这个视频帮我生成思维导图 [YouTube URL]"
+
+### 本地文件
+- "把这个PDF上传到NotebookLM /path/to/file.pdf"
+- "这个Markdown文件生成PPT /path/to/file.md"
+
+### 搜索关键词
+- "搜索 'AI发展趋势' 并生成报告"
+- "搜索关于'量子计算'的资料做成播客"
+
+### 混合使用
+- "把这篇文章、这个视频和这个PDF一起上传，生成一份报告"
 
 ## 自然语言 → NotebookLM 功能映射
 
@@ -78,55 +112,39 @@ notebooklm list  # 验证认证成功
 
 ## 工作流程
 
-### Step 1: 解析用户意图
+### Step 1: 识别内容源类型
 
-从用户输入中提取：
-1. **微信文章 URL**（必须）
-2. **处理意图**（可选）：播客/PPT/思维导图/Quiz 等
+Claude 自动识别输入类型：
 
-**示例**：
-```
-输入："把这篇文章生成播客 https://mp.weixin.qq.com/s/abc123"
-解析：
-  - URL: https://mp.weixin.qq.com/s/abc123
-  - 意图: audio
-```
+| 输入特征 | 识别为 | 处理方式 |
+|---------|-------|---------|
+| `https://mp.weixin.qq.com/s/` | 微信公众号 | MCP 工具抓取 |
+| `https://youtube.com/...` 或 `https://youtu.be/...` | YouTube | 直接传递给 NotebookLM |
+| `https://` 或 `http://` | 网页 | 直接传递给 NotebookLM |
+| `/path/to/file.pdf` | PDF 文件 | 直接上传 |
+| `/path/to/file.md` | Markdown | 直接上传 |
+| 关键词（无URL，无路径） | 搜索查询 | WebSearch → 汇总 → TXT |
 
-### Step 2: 获取微信文章内容
+### Step 2: 获取内容
 
-使用 MCP 工具 `read_weixin_article` 获取文章。
+**微信公众号**：
+- 使用 MCP 工具 `read_weixin_article`
+- 返回：title, author, publish_time, content
+- 保存为 TXT：`/tmp/weixin_{title}_{timestamp}.txt`
 
-**返回数据**：
-```json
-{
-  "success": true,
-  "title": "文章标题",
-  "author": "作者",
-  "publish_time": "发布时间",
-  "content": "文章内容（纯文本）"
-}
-```
+**网页/YouTube**：
+- 直接使用 URL 调用 `notebooklm source add [URL]`
+- NotebookLM 自动提取内容
 
-### Step 3: 创建 TXT 文件
+**本地文件**：
+- 直接上传：`notebooklm source add /path/to/file`
 
-将内容转换为标准格式：
+**搜索关键词**：
+- 使用 WebSearch 工具搜索关键词
+- 汇总前 3-5 条结果
+- 保存为 TXT：`/tmp/search_{keyword}_{timestamp}.txt`
 
-```
-标题：{title}
-作者：{author}
-发布时间：{publish_time}
-
-{content}
-```
-
-**保存路径**：`/tmp/weixin_{sanitized_title}_{timestamp}.txt`
-
-**为什么用 TXT？**
-- 轻量快速，上传更稳定
-- NotebookLM 对纯文本处理效果更好
-- 无需额外依赖（PDF 需要额外库）
-
-### Step 4: 上传到 NotebookLM
+### Step 3: 上传到 NotebookLM
 
 调用 `notebooklm` skill：
 
@@ -160,38 +178,7 @@ notebooklm source add /tmp/weixin_xxx.txt --wait  # 上传文件并等待处理�
 
 ## 完整示例
 
-### 示例 1：只上传不处理
-
-**用户输入**：
-```
-/weixin-to-notebooklm https://mp.weixin.qq.com/s/abc123xyz
-```
-
-**执行流程**：
-1. 获取文章内容
-2. 创建 TXT 文件
-3. 上传到 NotebookLM
-4. 完成
-
-**输出**：
-```
-✅ 微信文章已上传到 NotebookLM！
-
-📄 文章：深度学习的未来趋势
-👤 作者：张三
-📅 发布：2026-01-20
-
-📓 Notebook ID：abc123de-xxxx-xxxx
-📎 Source ID：def456gh-xxxx-xxxx
-
-💬 你可以继续：
-- "生成播客"
-- "做成PPT"
-- "画个思维导图"
-- 或者用 NotebookLM 网页端查看
-```
-
-### 示例 2：上传并生成播客
+### 示例 1：微信公众号文章 → 播客
 
 **用户输入**：
 ```
@@ -199,11 +186,11 @@ notebooklm source add /tmp/weixin_xxx.txt --wait  # 上传文件并等待处理�
 ```
 
 **执行流程**：
-1. 获取文章内容
-2. 创建 TXT 文件
-3. 上传到 NotebookLM 并等待处理完成
-4. 生成播客（`generate audio`）
-5. 等待播客生成完成（约 2-5 分钟）
+1. 识别为微信公众号链接
+2. MCP 工具抓取文章内容
+3. 创建 TXT 文件
+4. 上传到 NotebookLM
+5. 生成播客（`generate audio`）
 6. 下载播客到本地
 
 **输出**：
@@ -218,70 +205,113 @@ notebooklm source add /tmp/weixin_xxx.txt --wait  # 上传文件并等待处理�
 📁 文件：/tmp/weixin_深度学习的未来趋势_podcast.mp3
 ⏱️ 时长：约 8 分钟
 📊 大小：12.3 MB
-
-💡 你也可以：
-- "做成PPT"
-- "画个思维导图"
-- "生成Quiz"
 ```
 
-### 示例 3：上传并生成 PPT
+### 示例 2：YouTube 视频 → 思维导图
 
 **用户输入**：
 ```
-这篇文章帮我做成PPT https://mp.weixin.qq.com/s/abc123xyz
+这个视频帮我画个思维导图 https://www.youtube.com/watch?v=abc123
 ```
 
 **执行流程**：
-1-3. 同上
-4. 生成幻灯片（`generate slide-deck`）
-5. 等待生成完成
-6. 下载 PDF 格式的幻灯片
+1. 识别为 YouTube 链接
+2. 直接传递给 NotebookLM（自动提取字幕）
+3. 生成思维导图（`generate mind-map`）
+4. 下载思维导图
 
 **输出**：
 ```
-✅ 微信文章已转换为PPT！
+✅ YouTube 视频已转换为思维导图！
 
-📄 文章：深度学习的未来趋势
-👤 作者：张三
+🎬 视频：Understanding Quantum Computing
+⏱️ 时长：23 分钟
+
+🗺️ 思维导图已生成：
+📁 文件：/tmp/youtube_quantum_computing_mindmap.json
+📊 节点数：45 个
+```
+
+### 示例 3：搜索关键词 → 报告
+
+**用户输入**：
+```
+搜索 'AI发展趋势 2026' 并生成报告
+```
+
+**执行流程**：
+1. 识别为搜索查询
+2. WebSearch 搜索关键词
+3. 汇总前 5 条结果
+4. 创建 TXT 文件
+5. 上传到 NotebookLM
+6. 生成报告（`generate report`）
+
+**输出**：
+```
+✅ 搜索结果已生成报告！
+
+🔍 关键词：AI发展趋势 2026
+📊 来源：5 篇文章
+
+📄 报告已生成：
+📁 文件：/tmp/search_AI发展趋势2026_report.md
+📝 章节：7 个
+📊 大小：15.2 KB
+```
+
+### 示例 4：混合多源 → PPT
+
+**用户输入**：
+```
+把这篇文章、这个视频和这个PDF一起做成PPT：
+- https://example.com/article
+- https://youtube.com/watch?v=xyz
+- /Users/joe/Documents/research.pdf
+```
+
+**执行流程**：
+1. 创建新 Notebook
+2. 依次添加 3 个 Source
+3. 基于所有 Source 生成 PPT
+
+**输出**：
+```
+✅ 多源内容已整合为PPT！
+
+📚 内容源：
+  1. 网页文章：AI in 2026
+  2. YouTube：Future of AI
+  3. PDF：Research Notes (12 页)
 
 📊 PPT 已生成：
-📁 文件：/tmp/weixin_深度学习的未来趋势_slides.pdf
-📄 页数：15 页
-📦 大小：2.4 MB
-
-💡 可以用 Keynote/PowerPoint 打开编辑
+📁 文件：/tmp/multi_source_slides.pdf
+📄 页数：25 页
+📦 大小：3.8 MB
 ```
 
-### 示例 4：批量处理（高级）
+### 示例 5：本地 Markdown → Quiz
 
 **用户输入**：
 ```
-把这些文章都生成播客：
-1. https://mp.weixin.qq.com/s/abc123
-2. https://mp.weixin.qq.com/s/def456
-3. https://mp.weixin.qq.com/s/ghi789
+这个Markdown生成Quiz /Users/joe/notes/machine_learning.md
 ```
 
 **执行流程**：
-1. 依次处理每篇文章
-2. 为每篇文章创建独立的 Notebook
-3. 生成独立的播客文件
+1. 识别为本地 Markdown 文件
+2. 直接上传到 NotebookLM
+3. 生成 Quiz（`generate quiz`）
 
 **输出**：
 ```
-✅ 批量处理完成！
+✅ Markdown 已转换为Quiz！
 
-🎙️ 播客 1：深度学习的未来趋势
-📁 /tmp/weixin_深度学习_podcast.mp3 (12.3 MB)
+📄 文件：machine_learning.md
+📊 大小：8.5 KB
 
-🎙️ 播客 2：GPT-5 的技术突破
-📁 /tmp/weixin_GPT5_podcast.mp3 (9.8 MB)
-
-🎙️ 播客 3：AI 伦理的思考
-📁 /tmp/weixin_AI伦理_podcast.mp3 (11.2 MB)
-
-💾 所有文件已保存到 /tmp/
+📝 Quiz 已生成：
+📁 文件：/tmp/machine_learning_quiz.md
+❓ 题目：15 道（10选择 + 5简答）
 ```
 
 ## 错误处理

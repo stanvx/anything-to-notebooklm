@@ -16,7 +16,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}========================================${NC}"
-echo -e "${BLUE}  微信读书 → NotebookLM 安装程序${NC}"
+echo -e "${BLUE}  多源内容 → NotebookLM 安装程序${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
 

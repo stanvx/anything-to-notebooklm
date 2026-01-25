@@ -1,6 +1,17 @@
-# 微信读书 → NotebookLM 智能处理器
+# 多源内容 → NotebookLM 智能处理器
 
-自动从微信公众号获取文章内容，上传到 NotebookLM，并根据自然语言指令生成播客、PPT、思维导图、Quiz 等多种格式内容。
+自动从多种来源（微信公众号、网页、YouTube、PDF、Markdown等）获取内容，上传到 NotebookLM，并根据自然语言指令生成播客、PPT、思维导图、Quiz 等多种格式内容。
+
+## 支持的内容源
+
+| 内容源 | 示例 | 自动识别 |
+|-------|------|---------|
+| 微信公众号 | `https://mp.weixin.qq.com/s/xxx` | ✅ |
+| 任意网页 | `https://example.com/article` | ✅ |
+| YouTube | `https://youtube.com/watch?v=xxx` | ✅ |
+| PDF | `/path/to/file.pdf` | ✅ |
+| Markdown | `/path/to/file.md` | ✅ |
+| 搜索关键词 | "搜索 'AI趋势'" | ✅ |
 
 ## 快速开始
 
@@ -59,25 +70,39 @@ notebooklm list  # 验证认证成功
 
 ## 使用方式
 
-### 基础触发
-
+### 微信公众号
 ```
-/weixin-to-notebooklm https://mp.weixin.qq.com/s/xxx
-```
-
-或自然语言：
-
-```
-把这篇微信文章传到NotebookLM https://mp.weixin.qq.com/s/xxx
+把这篇微信文章生成播客 https://mp.weixin.qq.com/s/xxx
 ```
 
-### 带处理意图
-
+### 网页链接
 ```
-把这篇文章生成播客 https://mp.weixin.qq.com/s/xxx
-这篇文章帮我做成PPT https://mp.weixin.qq.com/s/xxx
-帮我画个思维导图 https://mp.weixin.qq.com/s/xxx
-这篇文章生成一个Quiz https://mp.weixin.qq.com/s/xxx
+把这个网页做成PPT https://example.com/article
+```
+
+### YouTube 视频
+```
+这个视频帮我画个思维导图 https://youtube.com/watch?v=xxx
+```
+
+### 本地文件
+```
+把这个PDF上传生成报告 /path/to/file.pdf
+这个Markdown生成Quiz /path/to/notes.md
+```
+
+### 搜索关键词
+```
+搜索 'AI发展趋势 2026' 并生成报告
+搜索关于'量子计算'的资料做成播客
+```
+
+### 混合多源
+```
+把这篇文章、这个视频和这个PDF一起做成PPT：
+- https://example.com/article
+- https://youtube.com/watch?v=xyz
+- /Users/joe/research.pdf
 ```
 
 ### 支持的内容格式
@@ -120,7 +145,7 @@ weixin-to-notebooklm/
 
 ### 外部工具
 - [notebooklm-py](https://github.com/teng-lin/notebooklm-py) - NotebookLM CLI 工具
-- [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) - 微信文章读取 MCP 服务器
+- [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) - 微信公众号文章读取 MCP 服务器（可选，仅微信公众号需要）
 
 ## 故障排查
 
