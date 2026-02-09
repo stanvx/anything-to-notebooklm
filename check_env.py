@@ -14,6 +14,11 @@ YELLOW = '\033[1;33m'
 BLUE = '\033[0;34m'
 NC = '\033[0m'
 
+SKILL_DIR = Path(__file__).parent
+VENV_DIR = SKILL_DIR / ".venv"
+VENV_PY = VENV_DIR / "bin" / "python"
+BIN_DIR = SKILL_DIR / "bin"
+
 def print_status(status, message):
     if status == "ok":
         print(f"{GREEN}✅ {message}{NC}")
@@ -44,17 +49,34 @@ def check_uv_version():
         print_status("error", "uv not found (required for package management)")
         return False
 
-def check_module(module_name, import_name=None):
+def check_venv():
+    if VENV_PY.exists():
+        print_status("ok", f"Virtual env found ({VENV_DIR})")
+        return True
+    print_status("error", f"Virtual env not found: {VENV_DIR}")
+    return False
+
+def check_module_in_venv(module_name, import_name=None):
     if import_name is None:
         import_name = module_name
 
-    try:
-        __import__(import_name)
-        print_status("ok", f"{module_name} installed")
-        return True
-    except ImportError:
-        print_status("error", f"{module_name} not installed")
+    if not VENV_PY.exists():
+        print_status("error", f"{module_name} not installed (venv missing)")
         return False
+
+    import subprocess
+    result = subprocess.run(
+        [str(VENV_PY), "-c", f"import {import_name}"],
+        capture_output=True,
+        text=True,
+        timeout=5
+    )
+    if result.returncode == 0:
+        print_status("ok", f"{module_name} installed (venv)")
+        return True
+
+    print_status("error", f"{module_name} not installed (venv)")
+    return False
 
 def check_command(cmd):
     import shutil
@@ -74,6 +96,33 @@ def check_command(cmd):
     else:
         print_status("error", f"{cmd} not found")
         return False
+
+def check_wrapper(cmd):
+    wrapper = BIN_DIR / cmd
+    if wrapper.exists() and os.access(wrapper, os.X_OK):
+        print_status("ok", f"{cmd} wrapper ready ({wrapper})")
+        return True
+    print_status("error", f"{cmd} wrapper not found (run ./install.sh)")
+    return False
+
+def check_playwright_import():
+    if not VENV_PY.exists():
+        print_status("error", "Playwright not available (venv missing)")
+        return False
+
+    import subprocess
+    result = subprocess.run(
+        [str(VENV_PY), "-c", "from playwright.sync_api import sync_playwright"],
+        capture_output=True,
+        text=True,
+        timeout=5
+    )
+    if result.returncode == 0:
+        print_status("ok", "Playwright imports successfully (venv)")
+        return True
+
+    print_status("error", "Playwright import failed (venv)")
+    return False
 
 def check_mcp_config():
     config_path = Path.home() / ".claude" / "config.json"
@@ -97,8 +146,7 @@ def check_mcp_config():
         return False
 
 def check_mcp_server():
-    skill_dir = Path(__file__).parent
-    mcp_server = skill_dir / "wexin-read-mcp" / "src" / "server.py"
+    mcp_server = SKILL_DIR / "wexin-read-mcp" / "src" / "server.py"
 
     if mcp_server.exists():
         print_status("ok", "MCP server file exists")
@@ -109,9 +157,11 @@ def check_mcp_server():
 
 def check_notebooklm_auth():
     import subprocess
+    notebooklm_wrapper = BIN_DIR / "notebooklm"
+    cmd = [str(notebooklm_wrapper)] if notebooklm_wrapper.exists() else ["notebooklm"]
 
     try:
-        result = subprocess.run(["notebooklm", "list"],
+        result = subprocess.run(cmd + ["list"],
                               capture_output=True,
                               text=True,
                               timeout=10)
@@ -120,7 +170,7 @@ def check_notebooklm_auth():
             print_status("ok", "NotebookLM authenticated")
             return True
         else:
-            print_status("warning", "NotebookLM not authenticated (run: notebooklm login)")
+            print_status("warning", "NotebookLM not authenticated (run: ./bin/notebooklm login)")
             return False
     except subprocess.TimeoutExpired:
         print_status("warning", "NotebookLM auth check timed out")
@@ -140,30 +190,24 @@ def main():
     results.append(check_uv_version())
     print()
 
-    print(f"{YELLOW}[2/9] Core Python Dependencies{NC}")
-    results.append(check_module("fastmcp"))
-    results.append(check_module("playwright"))
-    results.append(check_module("beautifulsoup4", "bs4"))
-    results.append(check_module("lxml"))
-    results.append(check_module("markitdown"))
+    print(f"{YELLOW}[2/9] Local Virtual Environment{NC}")
+    results.append(check_venv())
     print()
 
-    print(f"{YELLOW}[3/9] Playwright Importability{NC}")
-    try:
-        from playwright.sync_api import sync_playwright
-        print_status("ok", "Playwright imports successfully")
-        results.append(True)
-    except Exception as e:
-        print_status("error", f"Playwright import failed: {e}")
-        results.append(False)
+    print(f"{YELLOW}[3/9] MCP Python Dependencies (venv){NC}")
+    results.append(check_module_in_venv("fastmcp"))
+    results.append(check_module_in_venv("playwright"))
+    results.append(check_module_in_venv("beautifulsoup4", "bs4"))
+    results.append(check_module_in_venv("lxml"))
     print()
 
-    print(f"{YELLOW}[4/9] NotebookLM CLI{NC}")
-    results.append(check_command("notebooklm"))
+    print(f"{YELLOW}[4/9] Playwright Importability (venv){NC}")
+    results.append(check_playwright_import())
     print()
 
-    print(f"{YELLOW}[5/9] markitdown CLI{NC}")
-    results.append(check_command("markitdown"))
+    print(f"{YELLOW}[5/9] CLI Wrappers (uvx){NC}")
+    results.append(check_wrapper("notebooklm"))
+    results.append(check_wrapper("markitdown"))
     print()
 
     print(f"{YELLOW}[6/9] Git{NC}")
@@ -200,7 +244,8 @@ def main():
         print("  1. Install uv: https://docs.astral.sh/uv/getting-started/")
         print("  2. Run installer: ./install.sh")
         print("  3. Configure MCP: edit ~/.claude/config.json")
-        print("  4. Authenticate NotebookLM: notebooklm login")
+        print(f"  4. Add CLI wrappers to PATH: export PATH=\"{BIN_DIR}:$PATH\"")
+        print("  5. Authenticate NotebookLM: ./bin/notebooklm login")
         print()
 
     sys.exit(0 if passed == total else 1)

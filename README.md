@@ -115,15 +115,33 @@ cd anything-to-notebooklm
 # 3. Configure MCP as prompted, then restart Claude Code
 ```
 
+> install.sh creates local CLI wrappers in `./bin` (powered by uvx). Add them to your PATH to use `notebooklm` and `markitdown` directly:
+> `export PATH="$HOME/.claude/skills/anything-to-notebooklm/bin:$PATH"`
+
 ### First Use
 
 ```bash
 # NotebookLM authentication (one-time only)
-notebooklm login
-notebooklm list  # Verify success
+./bin/notebooklm login
+./bin/notebooklm list  # Verify success
 
 # Environment check (optional)
 ./check_env.py
+```
+
+### OpenClaw (AgentSkills) Setup
+
+OpenClaw loads AgentSkills from `<workspace>/skills` (highest priority) and `~/.openclaw/skills` (shared). The default workspace is `~/.openclaw/workspace`. If you haven’t bootstrapped OpenClaw yet, run `openclaw setup` once.
+
+```bash
+mkdir -p ~/.openclaw/workspace/skills
+git clone https://github.com/stanvx/anything-to-notebooklm \
+  ~/.openclaw/workspace/skills/anything-to-notebooklm
+cd ~/.openclaw/workspace/skills/anything-to-notebooklm
+./install.sh
+
+# Optional: add wrappers to PATH for easy access
+export PATH="$HOME/.openclaw/workspace/skills/anything-to-notebooklm/bin:$PATH"
 ```
 
 ## 💡 Usage Examples
@@ -338,20 +356,20 @@ notebooklm ask "Compare the two viewpoints" -s src1 -s src2
 
 ```bash
 # Test MCP server
-uv run python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
+~/.claude/skills/anything-to-notebooklm/.venv/bin/python \
+  ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
 
 # Reinstall dependencies
-cd ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp
-uv pip install -r requirements.txt
-uv run playwright install chromium
+cd ~/.claude/skills/anything-to-notebooklm
+./install.sh
 ```
 
 ### NotebookLM Authentication Failed
 
 ```bash
-notebooklm auth check --test  # Full diagnostic
-notebooklm login              # Re-authenticate
-notebooklm list               # Verify
+./bin/notebooklm auth check --test  # Full diagnostic
+./bin/notebooklm login              # Re-authenticate
+./bin/notebooklm list               # Verify
 ```
 
 ### Environment Check

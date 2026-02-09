@@ -1,6 +1,7 @@
 ---
 name: anything-to-notebooklm
 description: "Multi-source content processor for Google NotebookLM. Converts any content (URLs, YouTube, WeChat articles, PDFs, EPUB, Office docs, images with OCR, audio, CSV/JSON/XML, ZIP archives, search queries, Google Drive files) into podcasts, videos, slide decks, quizzes, flashcards, mind maps, infographics, reports, data tables, and study guides via NotebookLM. Use when users want to: (1) convert content to audio/video/slides, (2) generate study materials from documents, (3) create podcasts from articles or books, (4) build mind maps or infographics, (5) research topics and generate reports, (6) upload content to NotebookLM, (7) batch process multiple sources, or any task involving content transformation through NotebookLM."
+metadata: { "openclaw": { "emoji": "📚", "requires": { "bins": ["uv", "git"] }, "homepage": "https://github.com/stanvx/anything-to-notebooklm" } }
 ---
 
 # Anything → NotebookLM
@@ -9,13 +10,16 @@ Automatically acquire content from 15+ source types, upload to Google NotebookLM
 
 ## Prerequisites
 
-1. **NotebookLM CLI** — authenticate once: `notebooklm login` then verify with `notebooklm list`
-2. **WeChat MCP** (optional, for WeChat articles only) — configure in `~/.claude/config.json`:
+1. **NotebookLM CLI** — authenticate once: `./bin/notebooklm login` then verify with `./bin/notebooklm list` (OpenClaw: use `{baseDir}/bin/notebooklm` or add `{baseDir}/bin` to PATH)
+2. **WeChat MCP** (optional, for WeChat articles only; Claude Code) — configure in `~/.claude/config.json`:
    ```json
-   { "mcpServers": { "weixin-reader": { "command": "python", "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"] } } }
+   { "mcpServers": { "weixin-reader": { "command": "<SKILL_DIR>/.venv/bin/python", "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"] } } }
    ```
    Restart Claude Code after configuration.
-3. **Environment check**: `./check_env.py` (9-point diagnostic)
+3. **markitdown CLI** — use `./bin/markitdown` for conversions (OpenClaw: `{baseDir}/bin/markitdown`)
+4. **Environment check**: `./check_env.py` (9-point diagnostic)
+
+> Command note: if `notebooklm` or `markitdown` aren’t on PATH, use the wrappers in `./bin` (OpenClaw: `{baseDir}/bin`).
 
 ## Workflow
 
@@ -52,7 +56,7 @@ Process any request in these steps:
 
 **URLs / YouTube**: Pass directly to `notebooklm source add <URL>` — NotebookLM handles extraction.
 
-**Documents / ebooks / images / audio**: Convert via `markitdown /path/to/file -o /tmp/converted.md` → save as TXT.
+**Documents / ebooks / images / audio**: Convert via `./bin/markitdown /path/to/file -o /tmp/converted.md` → save as TXT.
 
 **ZIP archives**: Extract to temp dir → iterate all supported files → batch convert with markitdown → merge or add as multiple sources.
 

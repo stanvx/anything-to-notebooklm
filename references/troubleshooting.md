@@ -13,9 +13,9 @@ Run the built-in environment check script:
 ### NotebookLM Authentication Failed
 
 ```bash
-notebooklm auth check --test   # Full diagnostic with network test
-notebooklm login               # Re-authenticate (opens browser)
-notebooklm list                # Verify authentication
+./bin/notebooklm auth check --test   # Full diagnostic with network test
+./bin/notebooklm login               # Re-authenticate (opens browser)
+./bin/notebooklm list                # Verify authentication
 ```
 
 If using CI/CD, set `NOTEBOOKLM_AUTH_JSON` environment variable with inline auth JSON.
@@ -24,12 +24,12 @@ If using CI/CD, set `NOTEBOOKLM_AUTH_JSON` environment variable with inline auth
 
 ```bash
 # Test the MCP server directly
-python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
+~/.claude/skills/anything-to-notebooklm/.venv/bin/python \
+  ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
 
 # Reinstall dependencies
-cd ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp
-pip install -r requirements.txt
-playwright install chromium
+cd ~/.claude/skills/anything-to-notebooklm
+./install.sh
 ```
 
 Verify MCP configuration in `~/.claude/config.json`:
@@ -37,7 +37,7 @@ Verify MCP configuration in `~/.claude/config.json`:
 {
   "mcpServers": {
     "weixin-reader": {
-      "command": "python",
+      "command": "<SKILL_DIR>/.venv/bin/python",
       "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"]
     }
   }
@@ -75,10 +75,10 @@ notebooklm source wait <source_id> --timeout 120
 
 ```bash
 # Test markitdown directly
-markitdown /path/to/file.pdf
+./bin/markitdown /path/to/file.pdf
 
-# Reinstall with all extras
-pip install "markitdown[all]" --upgrade
+# Recreate wrappers and refresh dependencies
+./install.sh
 ```
 
 ### Rate Limiting
@@ -93,7 +93,7 @@ notebooklm generate audio --retry 3 --wait
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| "Not logged in" | Authentication expired | `notebooklm login` |
+| "Not logged in" | Authentication expired | `./bin/notebooklm login` |
 | "Notebook not found" | Invalid/expired notebook ID | `notebooklm list` to get current IDs |
 | "Source too short" | Content < ~500 words | Add more content or combine sources |
 | "Source too long" | Content > ~500K words | Split into smaller documents |

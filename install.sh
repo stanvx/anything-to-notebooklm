@@ -7,6 +7,9 @@ set -e
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_NAME="anything-to-notebooklm"
+VENV_DIR="$SKILL_DIR/.venv"
+VENV_PY="$VENV_DIR/bin/python"
+BIN_DIR="$SKILL_DIR/bin"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -29,9 +32,19 @@ fi
 UV_VERSION=$(uv --version)
 echo -e "${GREEN}✅ $UV_VERSION${NC}"
 
-# 2. Clone wexin-read-mcp if needed
+# 2. Create local virtual environment
 echo ""
-echo -e "${YELLOW}[2/6] Installing MCP server...${NC}"
+echo -e "${YELLOW}[2/6] Creating local virtual environment...${NC}"
+if [ -d "$VENV_DIR" ]; then
+    echo -e "${GREEN}✅ Virtual environment already exists${NC}"
+else
+    uv venv "$VENV_DIR"
+    echo -e "${GREEN}✅ Virtual environment created${NC}"
+fi
+
+# 3. Clone wexin-read-mcp if needed
+echo ""
+echo -e "${YELLOW}[3/6] Installing MCP server...${NC}"
 MCP_DIR="$SKILL_DIR/wexin-read-mcp"
 
 if [ -d "$MCP_DIR" ]; then
@@ -42,55 +55,49 @@ else
     echo -e "${GREEN}✅ MCP server cloned successfully${NC}"
 fi
 
-# 3. Install Python dependencies
+# 4. Install MCP dependencies and Playwright
 echo ""
-echo -e "${YELLOW}[3/6] Installing Python dependencies...${NC}"
+echo -e "${YELLOW}[4/6] Installing MCP dependencies and Playwright...${NC}"
+
+if [ ! -x "$VENV_PY" ]; then
+    echo -e "${RED}❌ Virtual environment python not found: $VENV_PY${NC}"
+    exit 1
+fi
 
 if [ -f "$MCP_DIR/requirements.txt" ]; then
-    echo "Installing MCP dependencies..."
-    uv pip install --system -r "$MCP_DIR/requirements.txt" -q
+    echo "Installing MCP dependencies into local venv..."
+    uv pip install --python "$VENV_PY" -r "$MCP_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ MCP dependencies installed${NC}"
 fi
 
-if [ -f "$SKILL_DIR/requirements.txt" ]; then
-    echo "Installing skill dependencies (including markitdown file converter)..."
-    uv pip install --system -r "$SKILL_DIR/requirements.txt" -q
-    echo -e "${GREEN}✅ Skill dependencies installed${NC}"
-    echo -e "${GREEN}✅ markitdown installed (supports 15+ file format conversions)${NC}"
-fi
-
-# 4. Install Playwright browser
-echo ""
-echo -e "${YELLOW}[4/6] Installing Playwright browser...${NC}"
+echo "Installing Playwright browser..."
 echo "This may take a few minutes, please be patient..."
 
-if python3 -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
-    uv run --system playwright install chromium
+if "$VENV_PY" -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
+    "$VENV_PY" -m playwright install chromium
     echo -e "${GREEN}✅ Playwright browser installed${NC}"
 else
     echo -e "${RED}❌ Playwright import failed. Please check installation${NC}"
     exit 1
 fi
 
-# 5. Check and install notebooklm
+# 5. Set up CLI wrappers (uvx)
 echo ""
-echo -e "${YELLOW}[5/6] Checking NotebookLM CLI...${NC}"
+echo -e "${YELLOW}[5/6] Setting up CLI wrappers (uvx)...${NC}"
+mkdir -p "$BIN_DIR"
 
-if command -v notebooklm &> /dev/null; then
-    NOTEBOOKLM_VERSION=$(notebooklm --version 2>/dev/null || echo "unknown")
-    echo -e "${GREEN}✅ NotebookLM CLI installed ($NOTEBOOKLM_VERSION)${NC}"
-else
-    echo "Installing notebooklm-py..."
-    uv pip install --system git+https://github.com/teng-lin/notebooklm-py.git -q
+cat > "$BIN_DIR/notebooklm" <<'EOF'
+#!/bin/bash
+exec uvx --from "git+https://github.com/teng-lin/notebooklm-py.git" notebooklm "$@"
+EOF
 
-    if command -v notebooklm &> /dev/null; then
-        echo -e "${GREEN}✅ NotebookLM CLI installed${NC}"
-    else
-        echo -e "${RED}❌ NotebookLM CLI installation failed${NC}"
-        echo "Please install manually: uv pip install --system git+https://github.com/teng-lin/notebooklm-py.git"
-        exit 1
-    fi
-fi
+cat > "$BIN_DIR/markitdown" <<'EOF'
+#!/bin/bash
+exec uvx --from "markitdown[all]" markitdown "$@"
+EOF
+
+chmod +x "$BIN_DIR/notebooklm" "$BIN_DIR/markitdown"
+echo -e "${GREEN}✅ notebooklm + markitdown wrappers created${NC}"
 
 # 6. Configuration guidance
 echo ""
@@ -99,7 +106,7 @@ echo ""
 
 CLAUDE_CONFIG="$HOME/.claude/config.json"
 CONFIG_SNIPPET="    \"weixin-reader\": {
-      \"command\": \"python\",
+      \"command\": \"$VENV_PY\",
       \"args\": [
         \"$MCP_DIR/src/server.py\"
       ]
@@ -135,8 +142,8 @@ echo ""
 echo -e "${BLUE}🔐 NotebookLM Authentication${NC}"
 echo ""
 echo "Before first use, run:"
-echo -e "${GREEN}  notebooklm login${NC}"
-echo -e "${GREEN}  notebooklm list  # Verify authentication${NC}"
+echo -e "${GREEN}  $BIN_DIR/notebooklm login${NC}"
+echo -e "${GREEN}  $BIN_DIR/notebooklm list  # Verify authentication${NC}"
 echo ""
 
 echo ""
@@ -148,7 +155,8 @@ echo "📦 Install location: $SKILL_DIR"
 echo ""
 echo "⚠️  Important reminders:"
 echo "  1. Restart Claude Code after configuring MCP server"
-echo "  2. Run notebooklm login before first use"
+echo "  2. Add CLI wrappers to PATH: export PATH=\"$BIN_DIR:\$PATH\""
+echo "  3. Run notebooklm login before first use"
 echo ""
 echo "🚀 Usage example:"
 echo "  Turn this article into a podcast https://mp.weixin.qq.com/s/xxx"
