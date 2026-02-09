@@ -98,11 +98,17 @@ def check_command(cmd):
         return False
 
 def check_wrapper(cmd):
+    """Check if a CLI tool is available in the venv or via bin/ wrapper."""
+    venv_bin = VENV_DIR / "bin" / cmd
     wrapper = BIN_DIR / cmd
-    if wrapper.exists() and os.access(wrapper, os.X_OK):
+
+    if venv_bin.exists() and os.access(venv_bin, os.X_OK):
+        print_status("ok", f"{cmd} installed (.venv/bin/{cmd})")
+        return True
+    elif wrapper.exists() and os.access(wrapper, os.X_OK):
         print_status("ok", f"{cmd} wrapper ready ({wrapper})")
         return True
-    print_status("error", f"{cmd} wrapper not found (run ./install.sh)")
+    print_status("error", f"{cmd} not found (run ./install.sh)")
     return False
 
 def check_playwright_import():
@@ -205,7 +211,7 @@ def main():
     results.append(check_playwright_import())
     print()
 
-    print(f"{YELLOW}[5/9] CLI Wrappers (uvx){NC}")
+    print(f"{YELLOW}[5/9] CLI Tools{NC}")
     results.append(check_wrapper("notebooklm"))
     results.append(check_wrapper("markitdown"))
     print()
@@ -243,9 +249,8 @@ def main():
         print("💡 Fix suggestions:")
         print("  1. Install uv: https://docs.astral.sh/uv/getting-started/")
         print("  2. Run installer: ./install.sh")
-        print("  3. Configure MCP: edit ~/.claude/config.json")
-        print(f"  4. Add CLI wrappers to PATH: export PATH=\"{BIN_DIR}:$PATH\"")
-        print("  5. Authenticate NotebookLM: ./bin/notebooklm login")
+        print("  3. Authenticate NotebookLM: ./bin/notebooklm login")
+        print("  4. (Claude Code) Configure MCP: edit ~/.claude/config.json")
         print()
 
     sys.exit(0 if passed == total else 1)

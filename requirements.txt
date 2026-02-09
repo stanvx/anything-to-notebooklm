@@ -1,3 +1,5 @@
-# Optional local install for markitdown (install.sh uses uvx wrappers by default)
-markitdown[all]>=0.0.1
-# MCP server dependencies are managed in wexin-read-mcp/requirements.txt
+# All dependencies are installed into .venv by install.sh
+# MCP server deps: wexin-read-mcp/requirements.txt (fastmcp, playwright, bs4, lxml)
+# CLI tools (installed from pip/git):
+markitdown[all]
+notebooklm-py @ git+https://github.com/teng-lin/notebooklm-py.git

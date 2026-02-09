@@ -10,16 +10,18 @@ Automatically acquire content from 15+ source types, upload to Google NotebookLM
 
 ## Prerequisites
 
-1. **NotebookLM CLI** — authenticate once: `./bin/notebooklm login` then verify with `./bin/notebooklm list` (OpenClaw: use `{baseDir}/bin/notebooklm` or add `{baseDir}/bin` to PATH)
-2. **WeChat MCP** (optional, for WeChat articles only; Claude Code) — configure in `~/.claude/config.json`:
-   ```json
-   { "mcpServers": { "weixin-reader": { "command": "<SKILL_DIR>/.venv/bin/python", "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"] } } }
-   ```
-   Restart Claude Code after configuration.
-3. **markitdown CLI** — use `./bin/markitdown` for conversions (OpenClaw: `{baseDir}/bin/markitdown`)
+1. **NotebookLM CLI** — authenticate once: `./bin/notebooklm login` then verify with `./bin/notebooklm list`
+2. **WeChat MCP** (optional, for WeChat articles only):
+   - **Claude Code**: configure in `~/.claude/config.json`:
+     ```json
+     { "mcpServers": { "weixin-reader": { "command": "<SKILL_DIR>/.venv/bin/python", "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"] } } }
+     ```
+     Restart Claude Code after configuration.
+   - **OpenClaw**: run directly when needed: `{baseDir}/.venv/bin/python {baseDir}/wexin-read-mcp/src/server.py`
+3. **markitdown CLI** — use `./bin/markitdown` for conversions
 4. **Environment check**: `./check_env.py` (9-point diagnostic)
 
-> Command note: if `notebooklm` or `markitdown` aren’t on PATH, use the wrappers in `./bin` (OpenClaw: `{baseDir}/bin`).
+> All CLI tools are installed into `.venv/` by `./install.sh`. Wrappers in `./bin/` point to the venv binaries.
 
 ## Workflow
 

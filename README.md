@@ -115,8 +115,8 @@ cd anything-to-notebooklm
 # 3. Configure MCP as prompted, then restart Claude Code
 ```
 
-> install.sh creates local CLI wrappers in `./bin` (powered by uvx). Add them to your PATH to use `notebooklm` and `markitdown` directly:
-> `export PATH="$HOME/.claude/skills/anything-to-notebooklm/bin:$PATH"`
+> install.sh creates a local `.venv` with all dependencies and convenience wrappers in `./bin/`.
+> Optionally add to PATH: `export PATH="$HOME/.claude/skills/anything-to-notebooklm/bin:$PATH"`
 
 ### First Use
 
@@ -131,7 +131,7 @@ cd anything-to-notebooklm
 
 ### OpenClaw (AgentSkills) Setup
 
-OpenClaw loads AgentSkills from `<workspace>/skills` (highest priority) and `~/.openclaw/skills` (shared). The default workspace is `~/.openclaw/workspace`. If you haven’t bootstrapped OpenClaw yet, run `openclaw setup` once.
+OpenClaw loads skills from `<workspace>/skills/` or `~/.openclaw/skills/`. If you haven’t bootstrapped OpenClaw yet, run `openclaw setup` first.
 
 ```bash
 mkdir -p ~/.openclaw/workspace/skills
@@ -139,10 +139,9 @@ git clone https://github.com/stanvx/anything-to-notebooklm \
   ~/.openclaw/workspace/skills/anything-to-notebooklm
 cd ~/.openclaw/workspace/skills/anything-to-notebooklm
 ./install.sh
-
-# Optional: add wrappers to PATH for easy access
-export PATH="$HOME/.openclaw/workspace/skills/anything-to-notebooklm/bin:$PATH"
 ```
+
+> **Note:** OpenClaw doesn’t use Claude Code’s MCP config. The skill instructions handle WeChat article fetching directly via the venv Python interpreter.
 
 ## 💡 Usage Examples
 
