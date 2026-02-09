@@ -19,22 +19,15 @@ echo -e "${BLUE}  Multi-Source → NotebookLM Installer${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
 
-# 1. Check Python version
-echo -e "${YELLOW}[1/6] Checking Python environment...${NC}"
-if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}❌ Python3 not found. Please install Python 3.9+${NC}"
+# 1. Check uv installation
+echo -e "${YELLOW}[1/6] Checking uv package manager...${NC}"
+if ! command -v uv &> /dev/null; then
+    echo -e "${RED}❌ uv not found. Please install uv from https://docs.astral.sh/uv/getting-started/${NC}"
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
-REQUIRED_VERSION="3.9"
-
-if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$PYTHON_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]; then
-    echo -e "${RED}❌ Python version too old (current: $PYTHON_VERSION, required: 3.9+)${NC}"
-    exit 1
-fi
-
-echo -e "${GREEN}✅ Python $PYTHON_VERSION${NC}"
+UV_VERSION=$(uv --version)
+echo -e "${GREEN}✅ $UV_VERSION${NC}"
 
 # 2. Clone wexin-read-mcp if needed
 echo ""
@@ -55,13 +48,13 @@ echo -e "${YELLOW}[3/6] Installing Python dependencies...${NC}"
 
 if [ -f "$MCP_DIR/requirements.txt" ]; then
     echo "Installing MCP dependencies..."
-    pip3 install -r "$MCP_DIR/requirements.txt" -q
+    uv pip install -r "$MCP_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ MCP dependencies installed${NC}"
 fi
 
 if [ -f "$SKILL_DIR/requirements.txt" ]; then
     echo "Installing skill dependencies (including markitdown file converter)..."
-    pip3 install -r "$SKILL_DIR/requirements.txt" -q
+    uv pip install -r "$SKILL_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ Skill dependencies installed${NC}"
     echo -e "${GREEN}✅ markitdown installed (supports 15+ file format conversions)${NC}"
 fi
@@ -71,8 +64,8 @@ echo ""
 echo -e "${YELLOW}[4/6] Installing Playwright browser...${NC}"
 echo "This may take a few minutes, please be patient..."
 
-if python3 -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
-    playwright install chromium
+if uv run python -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
+    uv run playwright install chromium
     echo -e "${GREEN}✅ Playwright browser installed${NC}"
 else
     echo -e "${RED}❌ Playwright import failed. Please check installation${NC}"
@@ -88,13 +81,13 @@ if command -v notebooklm &> /dev/null; then
     echo -e "${GREEN}✅ NotebookLM CLI installed ($NOTEBOOKLM_VERSION)${NC}"
 else
     echo "Installing notebooklm-py..."
-    pip3 install git+https://github.com/teng-lin/notebooklm-py.git -q
+    uv pip install git+https://github.com/teng-lin/notebooklm-py.git -q
 
     if command -v notebooklm &> /dev/null; then
         echo -e "${GREEN}✅ NotebookLM CLI installed${NC}"
     else
         echo -e "${RED}❌ NotebookLM CLI installation failed${NC}"
-        echo "Please install manually: pip3 install git+https://github.com/teng-lin/notebooklm-py.git"
+        echo "Please install manually: uv pip install git+https://github.com/teng-lin/notebooklm-py.git"
         exit 1
     fi
 fi

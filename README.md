@@ -4,13 +4,13 @@
 
 **One sentence turns into a podcast, PPT, mind map, quiz...**
 
+> 🔀 **Fork of [joeseesun/anything-to-notebooklm](https://github.com/joeseesun/anything-to-notebooklm)** with expanded features and improvements
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/badge/uv-enabled-blue.svg)](https://docs.astral.sh/uv/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![GitHub stars](https://img.shields.io/github/stars/joeseesun/anything-to-notebooklm?style=social)](https://github.com/joeseesun/anything-to-notebooklm/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/joeseesun/anything-to-notebooklm?style=social)](https://github.com/joeseesun/anything-to-notebooklm/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/joeseesun/anything-to-notebooklm)](https://github.com/joeseesun/anything-to-notebooklm/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/joeseesun/anything-to-notebooklm)](https://github.com/joeseesun/anything-to-notebooklm/commits/main)
+[![GitHub stars](https://img.shields.io/github/stars/stanvx/anything-to-notebooklm?style=social)](https://github.com/stanvx/anything-to-notebooklm/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/stanvx/anything-to-notebooklm)](https://github.com/stanvx/anything-to-notebooklm/issues)
 
 [Quick Start](#-quick-start) • [Supported Formats](#-supported-content-sources) • [Usage Examples](#-usage-examples) • [FAQ](#-faq)
 
@@ -96,7 +96,7 @@ AI:      ✅ 25-page PPT generated → slides.pdf
 
 ### Prerequisites
 
-- ✅ Python 3.9+
+- ✅ [uv](https://docs.astral.sh/uv/getting-started/) (universal Python tool runner)
 - ✅ Git (pre-installed on macOS/Linux)
 
 **That's it!** All other dependencies are auto-installed.
@@ -106,7 +106,7 @@ AI:      ✅ 25-page PPT generated → slides.pdf
 ```bash
 # 1. Clone to Claude skills directory
 cd ~/.claude/skills/
-git clone https://github.com/joeseesun/anything-to-notebooklm
+git clone https://github.com/stanvx/anything-to-notebooklm
 cd anything-to-notebooklm
 
 # 2. One-click install all dependencies
@@ -338,12 +338,12 @@ notebooklm ask "Compare the two viewpoints" -s src1 -s src2
 
 ```bash
 # Test MCP server
-python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
+uv run python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
 
 # Reinstall dependencies
 cd ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp
-pip install -r requirements.txt
-playwright install chromium
+uv pip install -r requirements.txt
+uv run playwright install chromium
 ```
 
 ### NotebookLM Authentication Failed
@@ -429,8 +429,8 @@ A: Nine styles via `--style`: auto, classic, whiteboard, kawaii, anime, watercol
 
 ## 📮 Contact
 
-- **Issues**: [GitHub Issues](https://github.com/joeseesun/anything-to-notebooklm/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/joeseesun/anything-to-notebooklm/discussions)
+- **Issues**: [GitHub Issues](https://github.com/stanvx/anything-to-notebooklm/issues)
+- **Original Repo**: [joeseesun/anything-to-notebooklm](https://github.com/joeseesun/anything-to-notebooklm)
 
 ---
 
@@ -438,6 +438,6 @@ A: Nine styles via `--style`: auto, classic, whiteboard, kawaii, anime, watercol
 
 **If you find this useful, please give it a ⭐ Star!**
 
-Made with ❤️ by [Joe](https://github.com/joeseesun)
+Fork of [joeseesun/anything-to-notebooklm](https://github.com/joeseesun/anything-to-notebooklm)
 
 </div>

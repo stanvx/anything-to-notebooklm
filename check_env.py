@@ -24,15 +24,24 @@ def print_status(status, message):
     else:
         print(f"{BLUE}ℹ️  {message}{NC}")
 
-def check_python_version():
-    version = sys.version_info
-    version_str = f"{version.major}.{version.minor}.{version.micro}"
-
-    if version.major >= 3 and version.minor >= 9:
-        print_status("ok", f"Python {version_str}")
-        return True
+def check_uv_version():
+    import shutil
+    
+    if shutil.which("uv"):
+        import subprocess
+        try:
+            result = subprocess.run(["uv", "--version"],
+                                  capture_output=True,
+                                  text=True,
+                                  timeout=5)
+            version = result.stdout.split('\n')[0] if result.stdout else "unknown"
+            print_status("ok", f"uv installed ({version})")
+            return True
+        except:
+            print_status("ok", "uv installed")
+            return True
     else:
-        print_status("error", f"Python {version_str} (requires 3.9+)")
+        print_status("error", "uv not found (required for package management)")
         return False
 
 def check_module(module_name, import_name=None):
@@ -127,8 +136,8 @@ def main():
 
     results = []
 
-    print(f"{YELLOW}[1/9] Python Version{NC}")
-    results.append(check_python_version())
+    print(f"{YELLOW}[1/9] Package Manager (uv){NC}")
+    results.append(check_uv_version())
     print()
 
     print(f"{YELLOW}[2/9] Core Python Dependencies{NC}")
@@ -188,9 +197,10 @@ def main():
 
     if passed < total:
         print("💡 Fix suggestions:")
-        print("  1. Run installer: ./install.sh")
-        print("  2. Configure MCP: edit ~/.claude/config.json")
-        print("  3. Authenticate NotebookLM: notebooklm login")
+        print("  1. Install uv: https://docs.astral.sh/uv/getting-started/")
+        print("  2. Run installer: ./install.sh")
+        print("  3. Configure MCP: edit ~/.claude/config.json")
+        print("  4. Authenticate NotebookLM: notebooklm login")
         print()
 
     sys.exit(0 if passed == total else 1)
