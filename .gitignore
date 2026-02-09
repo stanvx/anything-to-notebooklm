@@ -25,10 +25,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# MCP Server (will be cloned during install)
-# Keep the directory but ignore its contents
-wexin-read-mcp/
-
 # IDE
 .vscode/
 .idea/

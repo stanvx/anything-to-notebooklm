@@ -1,5 +1,4 @@
 # All dependencies are installed into .venv by install.sh
-# MCP server deps: wexin-read-mcp/requirements.txt (fastmcp, playwright, bs4, lxml)
 # CLI tools (installed from pip/git):
 markitdown[all]
 notebooklm-py @ git+https://github.com/teng-lin/notebooklm-py.git

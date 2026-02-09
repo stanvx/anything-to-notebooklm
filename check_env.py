@@ -5,7 +5,6 @@ Environment check script - Validates all anything-to-notebooklm skill dependenci
 
 import sys
 import os
-import json
 from pathlib import Path
 
 RED = '\033[0;31m'
@@ -56,28 +55,6 @@ def check_venv():
     print_status("error", f"Virtual env not found: {VENV_DIR}")
     return False
 
-def check_module_in_venv(module_name, import_name=None):
-    if import_name is None:
-        import_name = module_name
-
-    if not VENV_PY.exists():
-        print_status("error", f"{module_name} not installed (venv missing)")
-        return False
-
-    import subprocess
-    result = subprocess.run(
-        [str(VENV_PY), "-c", f"import {import_name}"],
-        capture_output=True,
-        text=True,
-        timeout=5
-    )
-    if result.returncode == 0:
-        print_status("ok", f"{module_name} installed (venv)")
-        return True
-
-    print_status("error", f"{module_name} not installed (venv)")
-    return False
-
 def check_command(cmd):
     import shutil
 
@@ -111,56 +88,6 @@ def check_wrapper(cmd):
     print_status("error", f"{cmd} not found (run ./install.sh)")
     return False
 
-def check_playwright_import():
-    if not VENV_PY.exists():
-        print_status("error", "Playwright not available (venv missing)")
-        return False
-
-    import subprocess
-    result = subprocess.run(
-        [str(VENV_PY), "-c", "from playwright.sync_api import sync_playwright"],
-        capture_output=True,
-        text=True,
-        timeout=5
-    )
-    if result.returncode == 0:
-        print_status("ok", "Playwright imports successfully (venv)")
-        return True
-
-    print_status("error", "Playwright import failed (venv)")
-    return False
-
-def check_mcp_config():
-    config_path = Path.home() / ".claude" / "config.json"
-
-    if not config_path.exists():
-        print_status("error", f"Claude config file not found: {config_path}")
-        return False
-
-    try:
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-
-        if "mcpServers" in config and "weixin-reader" in config["mcpServers"]:
-            print_status("ok", "MCP server configured")
-            return True
-        else:
-            print_status("warning", "MCP server not configured (manual setup required)")
-            return False
-    except Exception as e:
-        print_status("error", f"Cannot read config file: {e}")
-        return False
-
-def check_mcp_server():
-    mcp_server = SKILL_DIR / "wexin-read-mcp" / "src" / "server.py"
-
-    if mcp_server.exists():
-        print_status("ok", "MCP server file exists")
-        return True
-    else:
-        print_status("error", f"MCP server file not found: {mcp_server}")
-        return False
-
 def check_notebooklm_auth():
     import subprocess
     notebooklm_wrapper = BIN_DIR / "notebooklm"
@@ -192,43 +119,24 @@ def main():
 
     results = []
 
-    print(f"{YELLOW}[1/9] Package Manager (uv){NC}")
+    print(f"{YELLOW}[1/5] Package Manager (uv){NC}")
     results.append(check_uv_version())
     print()
 
-    print(f"{YELLOW}[2/9] Local Virtual Environment{NC}")
+    print(f"{YELLOW}[2/5] Local Virtual Environment{NC}")
     results.append(check_venv())
     print()
 
-    print(f"{YELLOW}[3/9] MCP Python Dependencies (venv){NC}")
-    results.append(check_module_in_venv("fastmcp"))
-    results.append(check_module_in_venv("playwright"))
-    results.append(check_module_in_venv("beautifulsoup4", "bs4"))
-    results.append(check_module_in_venv("lxml"))
-    print()
-
-    print(f"{YELLOW}[4/9] Playwright Importability (venv){NC}")
-    results.append(check_playwright_import())
-    print()
-
-    print(f"{YELLOW}[5/9] CLI Tools{NC}")
+    print(f"{YELLOW}[3/5] CLI Tools{NC}")
     results.append(check_wrapper("notebooklm"))
     results.append(check_wrapper("markitdown"))
     print()
 
-    print(f"{YELLOW}[6/9] Git{NC}")
+    print(f"{YELLOW}[4/5] Git{NC}")
     results.append(check_command("git"))
     print()
 
-    print(f"{YELLOW}[7/9] MCP Server File{NC}")
-    results.append(check_mcp_server())
-    print()
-
-    print(f"{YELLOW}[8/9] MCP Configuration{NC}")
-    results.append(check_mcp_config())
-    print()
-
-    print(f"{YELLOW}[9/9] NotebookLM Authentication{NC}")
+    print(f"{YELLOW}[5/5] NotebookLM Authentication{NC}")
     results.append(check_notebooklm_auth())
     print()
 
@@ -250,7 +158,6 @@ def main():
         print("  1. Install uv: https://docs.astral.sh/uv/getting-started/")
         print("  2. Run installer: ./install.sh")
         print("  3. Authenticate NotebookLM: ./bin/notebooklm login")
-        print("  4. (Claude Code) Configure MCP: edit ~/.claude/config.json")
         print()
 
     sys.exit(0 if passed == total else 1)

@@ -1,6 +1,6 @@
 ---
 name: anything-to-notebooklm
-description: "Multi-source content processor for Google NotebookLM. Converts any content (URLs, YouTube, WeChat articles, PDFs, EPUB, Office docs, images with OCR, audio, CSV/JSON/XML, ZIP archives, search queries, Google Drive files) into podcasts, videos, slide decks, quizzes, flashcards, mind maps, infographics, reports, data tables, and study guides via NotebookLM. Use when users want to: (1) convert content to audio/video/slides, (2) generate study materials from documents, (3) create podcasts from articles or books, (4) build mind maps or infographics, (5) research topics and generate reports, (6) upload content to NotebookLM, (7) batch process multiple sources, or any task involving content transformation through NotebookLM."
+description: "Multi-source content processor for Google NotebookLM. Converts any content (URLs, YouTube, PDFs, EPUB, Office docs, images with OCR, audio, CSV/JSON/XML, ZIP archives, search queries, Google Drive files) into podcasts, videos, slide decks, quizzes, flashcards, mind maps, infographics, reports, data tables, and study guides via NotebookLM. Use when users want to: (1) convert content to audio/video/slides, (2) generate study materials from documents, (3) create podcasts from articles or books, (4) build mind maps or infographics, (5) research topics and generate reports, (6) upload content to NotebookLM, (7) batch process multiple sources, or any task involving content transformation through NotebookLM."
 metadata: { "openclaw": { "emoji": "📚", "requires": { "bins": ["uv", "git"] }, "homepage": "https://github.com/stanvx/anything-to-notebooklm" } }
 ---
 
@@ -11,15 +11,8 @@ Automatically acquire content from 15+ source types, upload to Google NotebookLM
 ## Prerequisites
 
 1. **NotebookLM CLI** — authenticate once: `./bin/notebooklm login` then verify with `./bin/notebooklm list`
-2. **WeChat MCP** (optional, for WeChat articles only):
-   - **Claude Code**: configure in `~/.claude/config.json`:
-     ```json
-     { "mcpServers": { "weixin-reader": { "command": "<SKILL_DIR>/.venv/bin/python", "args": ["<SKILL_DIR>/wexin-read-mcp/src/server.py"] } } }
-     ```
-     Restart Claude Code after configuration.
-   - **OpenClaw**: run directly when needed: `{baseDir}/.venv/bin/python {baseDir}/wexin-read-mcp/src/server.py`
-3. **markitdown CLI** — use `./bin/markitdown` for conversions
-4. **Environment check**: `./check_env.py` (9-point diagnostic)
+2. **markitdown CLI** — use `./bin/markitdown` for conversions
+3. **Environment check**: `./check_env.py` (5-point diagnostic)
 
 > All CLI tools are installed into `.venv/` by `./install.sh`. Wrappers in `./bin/` point to the venv binaries.
 
@@ -37,7 +30,6 @@ Process any request in these steps:
 
 | Input Pattern | Type | Acquisition Method |
 |---------------|------|-------------------|
-| `https://mp.weixin.qq.com/s/` | WeChat article | MCP `read_weixin_article` → save TXT |
 | `https://youtube.com/...` or `https://youtu.be/...` | YouTube | Direct: `source add <URL>` |
 | `https://` or `http://` | Web page | Direct: `source add <URL>` |
 | `/path/to/file.pdf` | PDF | `markitdown` → TXT then `source add` |
@@ -53,8 +45,6 @@ Process any request in these steps:
 | Keywords (no URL/path) | Search query | WebSearch → aggregate → TXT |
 
 ### Step 2: Acquire Content
-
-**WeChat articles**: Use MCP tool `read_weixin_article` → returns title, author, publish_time, content → save as `/tmp/weixin_{title}_{timestamp}.txt`
 
 **URLs / YouTube**: Pass directly to `notebooklm source add <URL>` — NotebookLM handles extraction.
 

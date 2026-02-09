@@ -42,7 +42,6 @@ AI:      ✅ 25-page PPT generated → slides.pdf
 <td width="50%">
 
 ### 📱 Social Media
-- **WeChat Articles** (anti-scraping bypass)
 - **YouTube Videos** (auto subtitle extraction)
 
 ### 🌐 Web
@@ -112,7 +111,6 @@ cd anything-to-notebooklm
 # 2. One-click install all dependencies
 ./install.sh
 
-# 3. Configure MCP as prompted, then restart Claude Code
 ```
 
 > install.sh creates a local `.venv` with all dependencies and convenience wrappers in `./bin/`.
@@ -141,25 +139,10 @@ cd ~/.openclaw/workspace/skills/anything-to-notebooklm
 ./install.sh
 ```
 
-> **Note:** OpenClaw doesn’t use Claude Code’s MCP config. The skill instructions handle WeChat article fetching directly via the venv Python interpreter.
 
 ## 💡 Usage Examples
 
-### Scenario 1: Quick Learning — Article → Podcast
-
-```
-You: Turn this article into a podcast https://mp.weixin.qq.com/s/abc123
-
-AI automatically:
-  ✓ Fetches WeChat article content
-  ✓ Uploads to NotebookLM
-  ✓ Generates podcast (2-5 min)
-
-✅ Result: /tmp/article_podcast.mp3 (8 min, 12.3 MB)
-💡 Use: Listen during your commute
-```
-
-### Scenario 2: Team Sharing — Ebook → PPT
+### Scenario 1: Team Sharing — Ebook → PPT
 
 ```
 You: Turn this book into slides /Users/joe/Books/sapiens.epub
@@ -173,7 +156,7 @@ AI automatically:
 💡 Use: Ready for book club presentation
 ```
 
-### Scenario 3: Self-Assessment — Video → Quiz
+### Scenario 2: Self-Assessment — Video → Quiz
 
 ```
 You: Generate a quiz from this YouTube video https://youtube.com/watch?v=abc
@@ -187,7 +170,7 @@ AI automatically:
 💡 Use: Test your understanding
 ```
 
-### Scenario 4: Information Synthesis — Multi-Source → Report
+### Scenario 3: Information Synthesis — Multi-Source → Report
 
 ```
 You: Combine these into a report:
@@ -204,7 +187,7 @@ AI automatically:
 💡 Use: Complete topic research report
 ```
 
-### Scenario 5: Document Digitization — Scan → Text
+### Scenario 4: Document Digitization — Scan → Text
 
 ```
 You: Convert this scanned image to a document /Users/joe/scan.jpg
@@ -224,7 +207,6 @@ AI automatically:
 Auto-detects input type — no manual specification needed
 
 ```
-https://mp.weixin.qq.com/s/xxx   → WeChat Article
 https://youtube.com/watch?v=xxx  → YouTube Video
 /path/to/file.epub               → EPUB Ebook
 "search 'AI trends'"             → Search Query
@@ -243,13 +225,6 @@ Mix and match multiple content sources
 
 ```
 Article + Video + PDF + Search Results → Comprehensive Report
-```
-
-### 🔒 Local-First
-Sensitive content processed locally
-
-```
-WeChat Article → Local MCP Fetch → Local Conversion → NotebookLM
 ```
 
 ### 🌍 50+ Languages
@@ -283,18 +258,14 @@ notebooklm source add-research "quantum computing" --mode deep --import-all
 │  • Auto-invoke appropriate tools     │
 └──────────────┬──────────────────────┘
                │
-      ┌────────┴────────┐
-      │                 │
-      ▼                 ▼
-┌──────────┐     ┌─────────────┐
-│  WeChat   │     │ Other Formats│
-│  MCP Fetch│     │ markitdown   │
-└─────┬────┘     └──────┬──────┘
-      │                 │
-      └────────┬────────┘
                │
                ▼
 ┌─────────────────────────────────────┐
+│         markitdown                   │
+│  • Convert files to text             │
+└──────────────┬──────────────────────┘
+               │
+               ▼
 │         NotebookLM API               │
 │  • Upload content sources            │
 │  • AI-generate target formats        │
@@ -320,7 +291,6 @@ Add this article to my "AI Research" notebook https://example.com
 
 ```
 Generate podcasts from all of these:
-1. https://mp.weixin.qq.com/s/abc123
 2. https://example.com/article2
 3. /Users/joe/notes.md
 ```
@@ -351,18 +321,6 @@ notebooklm ask "Compare the two viewpoints" -s src1 -s src2
 
 ## 🐛 Troubleshooting
 
-### MCP Tool Not Found
-
-```bash
-# Test MCP server
-~/.claude/skills/anything-to-notebooklm/.venv/bin/python \
-  ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
-
-# Reinstall dependencies
-cd ~/.claude/skills/anything-to-notebooklm
-./install.sh
-```
-
 ### NotebookLM Authentication Failed
 
 ```bash
@@ -374,7 +332,7 @@ cd ~/.claude/skills/anything-to-notebooklm
 ### Environment Check
 
 ```bash
-./check_env.py       # 9-point comprehensive check
+./check_env.py       # 5-point comprehensive check
 ./install.sh         # Reinstall
 ```
 
@@ -416,12 +374,6 @@ A:
 </details>
 
 <details>
-<summary><b>Q: Why is MCP needed?</b></summary>
-
-A: WeChat articles have anti-scraping protection. MCP uses browser simulation to bypass it. Other sources (web pages, YouTube, PDFs) don't need MCP.
-</details>
-
-<details>
 <summary><b>Q: What podcast formats are available?</b></summary>
 
 A: Four formats via `--format`: deep-dive (default, thorough exploration), brief (concise overview), critique (critical analysis), and debate (two-sided discussion). Three lengths: short, default, long.
@@ -441,7 +393,6 @@ A: Nine styles via `--style`: auto, classic, whiteboard, kawaii, anime, watercol
 
 - [Google NotebookLM](https://notebooklm.google.com/) — AI content generation
 - [Microsoft markitdown](https://github.com/microsoft/markitdown) — File format conversion
-- [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) — WeChat article fetching
 - [notebooklm-py](https://github.com/teng-lin/notebooklm-py) — NotebookLM CLI
 
 ## 📮 Contact
