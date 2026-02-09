@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🎯 多源内容 → NotebookLM 智能处理器
+# 🎯 Multi-Source Content → NotebookLM Smart Processor
 
-**一句话变播客、PPT、思维导图、Quiz...**
+**One sentence turns into a podcast, PPT, mind map, quiz...**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
@@ -12,44 +12,44 @@
 [![GitHub issues](https://img.shields.io/github/issues/joeseesun/anything-to-notebooklm)](https://github.com/joeseesun/anything-to-notebooklm/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/joeseesun/anything-to-notebooklm)](https://github.com/joeseesun/anything-to-notebooklm/commits/main)
 
-[快速开始](#-快速开始) • [支持格式](#-支持的内容源) • [使用示例](#-使用示例) • [常见问题](#-常见问题)
+[Quick Start](#-quick-start) • [Supported Formats](#-supported-content-sources) • [Usage Examples](#-usage-examples) • [FAQ](#-faq)
 
 </div>
 
 ---
 
-## ✨ 这是什么？
+## ✨ What Is This?
 
-一个 **Claude Code Skill**，让你用自然语言把**任何内容**变成**任何格式**。
+A **Claude Code Skill** that lets you use natural language to turn **any content** into **any format**.
 
 ```
-你说：把这篇微信文章生成播客
-AI ：✅ 8 分钟播客已生成 → podcast.mp3
+You say: Turn this article into a podcast
+AI:      ✅ 8-minute podcast generated → podcast.mp3
 
-你说：这本 EPUB 电子书做成思维导图
-AI ：✅ 思维导图已生成 → mindmap.json
+You say: Convert this EPUB ebook into a mind map
+AI:      ✅ Mind map generated → mindmap.json
 
-你说：这个 YouTube 视频做成 PPT
-AI ：✅ 25 页 PPT 已生成 → slides.pdf
+You say: Make this YouTube video into slides
+AI:      ✅ 25-page PPT generated → slides.pdf
 ```
 
-**原理**：自动从多种来源获取内容 → 上传到 [Google NotebookLM](https://notebooklm.google.com/) → AI 生成你想要的格式
+**How it works**: Automatically fetch content from multiple sources → Upload to [Google NotebookLM](https://notebooklm.google.com/) → AI generates your desired format
 
-## 🚀 支持的内容源（15+ 种格式）
+## 🚀 Supported Content Sources (15+ Formats)
 
 <table>
 <tr>
 <td width="50%">
 
-### 📱 社交媒体
-- **微信公众号**（绕过反爬虫）
-- **YouTube 视频**（自动提取字幕）
+### 📱 Social Media
+- **WeChat Articles** (anti-scraping bypass)
+- **YouTube Videos** (auto subtitle extraction)
 
-### 🌐 网页
-- **任意网页**（新闻、博客、文档）
-- **搜索关键词**（自动汇总结果）
+### 🌐 Web
+- **Any web page** (news, blogs, docs)
+- **Search keywords** (auto-aggregate results)
 
-### 📄 Office 文档
+### 📄 Office Documents
 - **Word** (.docx)
 - **PowerPoint** (.pptx)
 - **Excel** (.xlsx)
@@ -57,204 +57,221 @@ AI ：✅ 25 页 PPT 已生成 → slides.pdf
 </td>
 <td width="50%">
 
-### 📚 电子书与文档
-- **PDF**（支持扫描件 OCR）
-- **EPUB**（电子书）
+### 📚 Ebooks & Documents
+- **PDF** (including scanned with OCR)
+- **EPUB** (ebooks)
 - **Markdown** (.md)
 
-### 🖼️ 图片与音频
-- **图片**（JPEG/PNG/GIF，自动 OCR）
-- **音频**（WAV/MP3，自动转录）
+### 🖼️ Images & Audio
+- **Images** (JPEG/PNG/GIF, auto OCR)
+- **Audio** (WAV/MP3, auto transcription)
 
-### 📊 结构化数据
+### 📊 Structured Data
 - **CSV/JSON/XML**
-- **ZIP 压缩包**（批量处理）
+- **ZIP archives** (batch processing)
 
 </td>
 </tr>
 </table>
 
-**技术支持**: [Microsoft markitdown](https://github.com/microsoft/markitdown)
+**Powered by**: [Microsoft markitdown](https://github.com/microsoft/markitdown)
 
-## 🎨 可以生成什么？
+## 🎨 What Can It Generate?
 
-| 输出格式 | 用途 | 生成时间 | 触发词示例 |
-|---------|------|---------|-----------|
-| 🎙️ **播客** | 通勤路上听 | 2-5 分钟 | "生成播客"、"做成音频" |
-| 📊 **PPT** | 团队分享 | 1-3 分钟 | "做成PPT"、"生成幻灯片" |
-| 🗺️ **思维导图** | 理清结构 | 1-2 分钟 | "画个思维导图"、"生成脑图" |
-| 📝 **Quiz** | 自测掌握 | 1-2 分钟 | "生成Quiz"、"出题" |
-| 🎬 **视频** | 可视化 | 3-8 分钟 | "做个视频" |
-| 📄 **报告** | 深度分析 | 2-4 分钟 | "生成报告"、"写个总结" |
-| 📈 **信息图** | 数据可视化 | 2-3 分钟 | "做个信息图" |
-| 📋 **闪卡** | 记忆巩固 | 1-2 分钟 | "做成闪卡" |
+| Output Format | Use Case | Gen Time | Trigger Examples |
+|--------------|----------|----------|------------------|
+| 🎙️ **Podcast** | Listen on the go | 2–5 min | "generate podcast", "make audio" |
+| 📊 **Slides** | Team presentations | 1–3 min | "make PPT", "generate slides" |
+| 🗺️ **Mind Map** | Visualize structure | 1–2 min | "draw a mind map", "concept map" |
+| 📝 **Quiz** | Self-assessment | 1–2 min | "generate quiz", "create test" |
+| 🎬 **Video** | Visual content | 3–8 min | "make a video" |
+| 📄 **Report** | Deep analysis | 2–4 min | "generate report", "write summary" |
+| 📈 **Infographic** | Data visualization | 2–3 min | "make infographic" |
+| 📋 **Flashcards** | Memory reinforcement | 1–2 min | "make flashcards" |
+| 📊 **Data Table** | Structured comparison | 1–2 min | "create data table" |
 
-**完全自然语言，无需记命令！**
+**Fully natural language — no commands to memorize!**
 
-## ⚡ 快速开始
+## ⚡ Quick Start
 
-### 前置需求
+### Prerequisites
 
 - ✅ Python 3.9+
-- ✅ Git（macOS/Linux 自带）
+- ✅ Git (pre-installed on macOS/Linux)
 
-**就这两样！** 其他依赖一键自动安装。
+**That's it!** All other dependencies are auto-installed.
 
-### 安装（3 步）
+### Installation (3 Steps)
 
 ```bash
-# 1. 克隆到 Claude skills 目录
+# 1. Clone to Claude skills directory
 cd ~/.claude/skills/
 git clone https://github.com/joeseesun/anything-to-notebooklm
 cd anything-to-notebooklm
 
-# 2. 一键安装所有依赖
+# 2. One-click install all dependencies
 ./install.sh
 
-# 3. 按提示配置 MCP，然后重启 Claude Code
+# 3. Configure MCP as prompted, then restart Claude Code
 ```
 
-### 首次使用
+### First Use
 
 ```bash
-# NotebookLM 认证（只需一次）
+# NotebookLM authentication (one-time only)
 notebooklm login
-notebooklm list  # 验证成功
+notebooklm list  # Verify success
 
-# 环境检查（可选）
+# Environment check (optional)
 ./check_env.py
 ```
 
-## 💡 使用示例
+## 💡 Usage Examples
 
-### 场景 1：快速学习 - 文章 → 播客
-
-```
-你：把这篇文章生成播客 https://mp.weixin.qq.com/s/abc123
-
-AI 自动执行：
-  ✓ 抓取微信文章内容
-  ✓ 上传到 NotebookLM
-  ✓ 生成播客（2-5 分钟）
-
-✅ 结果：/tmp/article_podcast.mp3（8 分钟，12.3 MB）
-💡 用途：通勤路上听完一篇深度文章
-```
-
-### 场景 2：团队分享 - 电子书 → PPT
+### Scenario 1: Quick Learning — Article → Podcast
 
 ```
-你：这本书做成 PPT /Users/joe/Books/sapiens.epub
+You: Turn this article into a podcast https://mp.weixin.qq.com/s/abc123
 
-AI 自动执行：
-  ✓ 提取电子书内容（15 万字）
-  ✓ AI 精炼核心观点
-  ✓ 生成专业 PPT
+AI automatically:
+  ✓ Fetches WeChat article content
+  ✓ Uploads to NotebookLM
+  ✓ Generates podcast (2-5 min)
 
-✅ 结果：/tmp/sapiens_slides.pdf（25 页，3.8 MB）
-💡 用途：直接用于读书会分享
+✅ Result: /tmp/article_podcast.mp3 (8 min, 12.3 MB)
+💡 Use: Listen during your commute
 ```
 
-### 场景 3：自测学习 - 视频 → Quiz
+### Scenario 2: Team Sharing — Ebook → PPT
 
 ```
-你：这个 YouTube 视频生成 Quiz https://youtube.com/watch?v=abc
+You: Turn this book into slides /Users/joe/Books/sapiens.epub
 
-AI 自动执行：
-  ✓ 提取视频字幕
-  ✓ AI 分析关键知识点
-  ✓ 自动出题
+AI automatically:
+  ✓ Extracts ebook content (150K words)
+  ✓ AI distills key insights
+  ✓ Generates professional slides
 
-✅ 结果：/tmp/video_quiz.md（15 道题，10 选择 + 5 简答）
-💡 用途：检验学习效果
+✅ Result: /tmp/sapiens_slides.pdf (25 pages, 3.8 MB)
+💡 Use: Ready for book club presentation
 ```
 
-### 场景 4：信息整合 - 多源 → 报告
+### Scenario 3: Self-Assessment — Video → Quiz
 
 ```
-你：把这些内容一起做成报告：
+You: Generate a quiz from this YouTube video https://youtube.com/watch?v=abc
+
+AI automatically:
+  ✓ Extracts video subtitles
+  ✓ AI analyzes key knowledge points
+  ✓ Auto-generates questions
+
+✅ Result: /tmp/video_quiz.md (15 questions: 10 multiple choice + 5 short answer)
+💡 Use: Test your understanding
+```
+
+### Scenario 4: Information Synthesis — Multi-Source → Report
+
+```
+You: Combine these into a report:
     - https://example.com/article1
     - https://youtube.com/watch?v=xyz
     - /Users/joe/research.pdf
 
-AI 自动执行：
-  ✓ 汇总 3 个不同来源
-  ✓ AI 整合分析
-  ✓ 生成综合报告
+AI automatically:
+  ✓ Aggregates 3 different sources
+  ✓ AI synthesizes and analyzes
+  ✓ Generates comprehensive report
 
-✅ 结果：/tmp/multi_source_report.md（7 个章节，15.2 KB）
-💡 用途：全面的主题研究报告
+✅ Result: /tmp/multi_source_report.md (7 chapters, 15.2 KB)
+💡 Use: Complete topic research report
 ```
 
-### 场景 5：文档数字化 - 扫描件 → 文字
+### Scenario 5: Document Digitization — Scan → Text
 
 ```
-你：把这个扫描图片做成文档 /Users/joe/scan.jpg
+You: Convert this scanned image to a document /Users/joe/scan.jpg
 
-AI 自动执行：
-  ✓ OCR 识别图片中的文字
-  ✓ 提取为纯文本
-  ✓ 生成结构化文档
+AI automatically:
+  ✓ OCR recognizes text in image
+  ✓ Extracts as plain text
+  ✓ Generates structured document
 
-✅ 结果：/tmp/scan_document.txt（识别准确率 95%+）
-💡 用途：扫描件数字化归档
+✅ Result: /tmp/scan_document.txt (95%+ accuracy)
+💡 Use: Digital archiving of scanned documents
 ```
 
-## 🎯 核心特性
+## 🎯 Core Features
 
-### 🧠 智能识别
-自动判断输入类型，无需手动指定
-
-```
-https://mp.weixin.qq.com/s/xxx   → 微信公众号
-https://youtube.com/watch?v=xxx  → YouTube 视频
-/path/to/file.epub               → EPUB 电子书
-"搜索 'AI 趋势'"                  → 搜索查询
-```
-
-### 🚀 全自动处理
-从获取到生成，一气呵成
+### 🧠 Smart Recognition
+Auto-detects input type — no manual specification needed
 
 ```
-输入 → 获取 → 转换 → 上传 → 生成 → 下载
-      ︿________全自动________︿
+https://mp.weixin.qq.com/s/xxx   → WeChat Article
+https://youtube.com/watch?v=xxx  → YouTube Video
+/path/to/file.epub               → EPUB Ebook
+"search 'AI trends'"             → Search Query
 ```
 
-### 🌐 多源整合
-支持混合多种内容源
+### 🚀 Fully Automated
+From acquisition to generation — seamless end-to-end
 
 ```
-文章 + 视频 + PDF + 搜索结果 → 综合报告
+Input → Fetch → Convert → Upload → Generate → Download
+       ︿_________ Fully Automated _________︿
 ```
 
-### 🔒 本地优先
-敏感内容本地处理
+### 🌐 Multi-Source Integration
+Mix and match multiple content sources
 
 ```
-微信文章 → 本地 MCP 抓取 → 本地转换 → NotebookLM
+Article + Video + PDF + Search Results → Comprehensive Report
 ```
 
-## 📦 技术架构
+### 🔒 Local-First
+Sensitive content processed locally
+
+```
+WeChat Article → Local MCP Fetch → Local Conversion → NotebookLM
+```
+
+### 🌍 50+ Languages
+Generate content in any of 80+ supported languages
+
+```bash
+notebooklm language set es    # Spanish podcasts
+notebooklm language set ja    # Japanese reports
+```
+
+### 🔬 AI Research Agent
+Auto-discover and import sources
+
+```bash
+notebooklm source add-research "quantum computing" --mode deep --import-all
+```
+
+## 📦 Architecture
 
 ```
 ┌─────────────────────────────────────┐
-│          用户自然语言输入             │
-│  "把这篇文章生成播客 https://..."   │
+│       User Natural Language Input    │
+│  "Turn this article into a podcast   │
+│   https://..."                       │
 └──────────────┬──────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────┐
 │        Claude Code Skill             │
-│  • 智能识别内容源类型                 │
-│  • 自动调用对应工具                   │
+│  • Smart source type detection       │
+│  • Auto-invoke appropriate tools     │
 └──────────────┬──────────────────────┘
                │
       ┌────────┴────────┐
       │                 │
       ▼                 ▼
 ┌──────────┐     ┌─────────────┐
-│ 微信公众号 │     │  其他格式    │
-│ MCP 抓取  │     │ markitdown  │
+│  WeChat   │     │ Other Formats│
+│  MCP Fetch│     │ markitdown   │
 └─────┬────┘     └──────┬──────┘
       │                 │
       └────────┬────────┘
@@ -262,125 +279,155 @@ https://youtube.com/watch?v=xxx  → YouTube 视频
                ▼
 ┌─────────────────────────────────────┐
 │         NotebookLM API               │
-│  • 上传内容源                         │
-│  • AI 生成目标格式                    │
+│  • Upload content sources            │
+│  • AI-generate target formats        │
 └──────────────┬──────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────┐
-│           生成的文件                  │
-│  .mp3 / .pdf / .json / .md          │
+│         Generated Files              │
+│  .mp3 / .mp4 / .pdf / .json / .md   │
+│  .png / .csv / .html                 │
 └─────────────────────────────────────┘
 ```
 
-## 🔧 高级用法
+## 🔧 Advanced Usage
 
-### 指定已有 Notebook
-
-```
-把这篇文章加到我的【AI研究】笔记本 https://example.com
-```
-
-### 批量处理
+### Specify Existing Notebook
 
 ```
-把这些文章都生成播客：
+Add this article to my "AI Research" notebook https://example.com
+```
+
+### Batch Processing
+
+```
+Generate podcasts from all of these:
 1. https://mp.weixin.qq.com/s/abc123
 2. https://example.com/article2
 3. /Users/joe/notes.md
 ```
 
-### ZIP 批量转换
+### ZIP Batch Conversion
 
 ```
-把这个压缩包里的所有文档做成播客 /path/to/files.zip
+Turn all documents in this archive into a podcast /path/to/files.zip
 ```
 
-自动解压、识别、转换、合并
+Auto-extract, identify, convert, and merge.
 
-## 🐛 故障排查
-
-### MCP 工具未找到
+### Research → Content Pipeline
 
 ```bash
-# 测试 MCP 服务器
+# Discover sources automatically, then generate
+notebooklm source add-research "climate change policy" --mode deep --import-all
+notebooklm generate audio "Focus on policy solutions" --format debate --wait
+notebooklm download audio ./climate-podcast.mp3
+```
+
+### Chat with Your Sources
+
+```bash
+notebooklm ask "What are the key themes across all sources?"
+notebooklm ask "Compare the two viewpoints" -s src1 -s src2
+```
+
+## 🐛 Troubleshooting
+
+### MCP Tool Not Found
+
+```bash
+# Test MCP server
 python ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp/src/server.py
 
-# 重新安装依赖
+# Reinstall dependencies
 cd ~/.claude/skills/anything-to-notebooklm/wexin-read-mcp
 pip install -r requirements.txt
 playwright install chromium
 ```
 
-### NotebookLM 认证失败
+### NotebookLM Authentication Failed
 
 ```bash
-notebooklm login     # 重新登录
-notebooklm list      # 验证
+notebooklm auth check --test  # Full diagnostic
+notebooklm login              # Re-authenticate
+notebooklm list               # Verify
 ```
 
-### 环境检查
+### Environment Check
 
 ```bash
-./check_env.py       # 13 项全面检查
-./install.sh         # 重新安装
+./check_env.py       # 9-point comprehensive check
+./install.sh         # Reinstall
 ```
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎 PR、Issue、建议！
+PRs, Issues, and suggestions welcome!
 
-## ❓ 常见问题
+## ❓ FAQ
 
 <details>
-<summary><b>Q: 支持哪些语言？</b></summary>
+<summary><b>Q: What languages are supported?</b></summary>
 
-A: NotebookLM 支持多语言，中文、英文效果最佳。
+A: NotebookLM supports 80+ languages. Set with `notebooklm language set <code>`. English and Chinese work best.
 </details>
 
 <details>
-<summary><b>Q: 播客是谁的声音？</b></summary>
+<summary><b>Q: Whose voice is the podcast?</b></summary>
 
-A: Google AI 语音合成。英文是两个 AI 主持人对话，中文是单人叙述。
+A: Google AI voice synthesis. English features two AI hosts in dialogue; other languages typically use single narrator.
 </details>
 
 <details>
-<summary><b>Q: 内容长度限制？</b></summary>
+<summary><b>Q: What are the content length limits?</b></summary>
 
 A:
-- 最短：约 500 字
-- 最长：约 50 万字
-- 推荐：1000-10000 字效果最佳
+- Minimum: ~500 words
+- Maximum: ~500K words
+- Recommended: 1,000–10,000 words for best results
 </details>
 
 <details>
-<summary><b>Q: 可以商用吗？</b></summary>
+<summary><b>Q: Can I use this commercially?</b></summary>
 
 A:
-- 本 Skill：MIT 开源，可自由使用
-- 生成内容：遵守 NotebookLM 服务条款
-- 原始内容：遵守原内容版权
-- 建议：仅用于个人学习研究
+- This Skill: MIT open source, free to use
+- Generated content: Subject to NotebookLM Terms of Service
+- Source content: Subject to original content copyright
+- Recommendation: For personal learning and research only
 </details>
 
 <details>
-<summary><b>Q: 为什么需要 MCP？</b></summary>
+<summary><b>Q: Why is MCP needed?</b></summary>
 
-A: 微信公众号有反爬虫，MCP 用浏览器模拟绕过。其他内容源（网页、YouTube、PDF）不需要 MCP。
+A: WeChat articles have anti-scraping protection. MCP uses browser simulation to bypass it. Other sources (web pages, YouTube, PDFs) don't need MCP.
 </details>
 
-## 📄 许可证
+<details>
+<summary><b>Q: What podcast formats are available?</b></summary>
+
+A: Four formats via `--format`: deep-dive (default, thorough exploration), brief (concise overview), critique (critical analysis), and debate (two-sided discussion). Three lengths: short, default, long.
+</details>
+
+<details>
+<summary><b>Q: What video styles are available?</b></summary>
+
+A: Nine styles via `--style`: auto, classic, whiteboard, kawaii, anime, watercolor, retro-print, heritage, paper-craft.
+</details>
+
+## 📄 License
 
 [MIT License](LICENSE)
 
-## 🙏 致谢
+## 🙏 Acknowledgements
 
-- [Google NotebookLM](https://notebooklm.google.com/) - AI 内容生成
-- [Microsoft markitdown](https://github.com/microsoft/markitdown) - 文件转换
-- [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) - 微信抓取
-- [notebooklm-py](https://github.com/teng-lin/notebooklm-py) - NotebookLM CLI
+- [Google NotebookLM](https://notebooklm.google.com/) — AI content generation
+- [Microsoft markitdown](https://github.com/microsoft/markitdown) — File format conversion
+- [wexin-read-mcp](https://github.com/Bwkyd/wexin-read-mcp) — WeChat article fetching
+- [notebooklm-py](https://github.com/teng-lin/notebooklm-py) — NotebookLM CLI
 
-## 📮 联系
+## 📮 Contact
 
 - **Issues**: [GitHub Issues](https://github.com/joeseesun/anything-to-notebooklm/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/joeseesun/anything-to-notebooklm/discussions)
@@ -389,7 +436,7 @@ A: 微信公众号有反爬虫，MCP 用浏览器模拟绕过。其他内容源�
 
 <div align="center">
 
-**如果觉得有用，请给个 ⭐ Star！**
+**If you find this useful, please give it a ⭐ Star!**
 
 Made with ❤️ by [Joe](https://github.com/joeseesun)
 
