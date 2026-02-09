@@ -48,13 +48,13 @@ echo -e "${YELLOW}[3/6] Installing Python dependencies...${NC}"
 
 if [ -f "$MCP_DIR/requirements.txt" ]; then
     echo "Installing MCP dependencies..."
-    uv pip install -r "$MCP_DIR/requirements.txt" -q
+    uv pip install --system -r "$MCP_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ MCP dependencies installed${NC}"
 fi
 
 if [ -f "$SKILL_DIR/requirements.txt" ]; then
     echo "Installing skill dependencies (including markitdown file converter)..."
-    uv pip install -r "$SKILL_DIR/requirements.txt" -q
+    uv pip install --system -r "$SKILL_DIR/requirements.txt" -q
     echo -e "${GREEN}✅ Skill dependencies installed${NC}"
     echo -e "${GREEN}✅ markitdown installed (supports 15+ file format conversions)${NC}"
 fi
@@ -64,8 +64,8 @@ echo ""
 echo -e "${YELLOW}[4/6] Installing Playwright browser...${NC}"
 echo "This may take a few minutes, please be patient..."
 
-if uv run python -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
-    uv run playwright install chromium
+if python3 -c "from playwright.sync_api import sync_playwright" 2>/dev/null; then
+    uv run --system playwright install chromium
     echo -e "${GREEN}✅ Playwright browser installed${NC}"
 else
     echo -e "${RED}❌ Playwright import failed. Please check installation${NC}"
@@ -81,13 +81,13 @@ if command -v notebooklm &> /dev/null; then
     echo -e "${GREEN}✅ NotebookLM CLI installed ($NOTEBOOKLM_VERSION)${NC}"
 else
     echo "Installing notebooklm-py..."
-    uv pip install git+https://github.com/teng-lin/notebooklm-py.git -q
+    uv pip install --system git+https://github.com/teng-lin/notebooklm-py.git -q
 
     if command -v notebooklm &> /dev/null; then
         echo -e "${GREEN}✅ NotebookLM CLI installed${NC}"
     else
         echo -e "${RED}❌ NotebookLM CLI installation failed${NC}"
-        echo "Please install manually: uv pip install git+https://github.com/teng-lin/notebooklm-py.git"
+        echo "Please install manually: uv pip install --system git+https://github.com/teng-lin/notebooklm-py.git"
         exit 1
     fi
 fi
